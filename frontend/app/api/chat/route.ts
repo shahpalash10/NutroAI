@@ -1,7 +1,6 @@
 import { createDataStreamResponse, formatDataStreamPart, type JSONValue } from "ai";
+import { getBackendUrl } from "@/lib/backend-url";
 import type { TerminalLog, CartSummary, FitnessProfile } from "@/lib/types";
-
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
 
 interface StreamEvent {
   type: string;
@@ -22,7 +21,7 @@ export async function POST(req: Request): Promise<Response> {
 
   let backendResponse: Response;
   try {
-    backendResponse = await fetch(`${BACKEND_URL}/api/chat`, {
+    backendResponse = await fetch(`${getBackendUrl()}/api/chat`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ message: userMessage }),

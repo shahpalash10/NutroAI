@@ -1,10 +1,9 @@
 import { NextResponse } from "next/server";
-
-const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
+import { getBackendUrl } from "@/lib/backend-url";
 
 export async function GET(): Promise<NextResponse> {
   try {
-    const res = await fetch(`${BACKEND_URL}/api/profile`, {
+    const res = await fetch(`${getBackendUrl()}/api/profile`, {
       next: { revalidate: 0 },
     });
     if (!res.ok) {

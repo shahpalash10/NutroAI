@@ -5,6 +5,8 @@ from __future__ import annotations
 import json
 from contextlib import asynccontextmanager
 
+import os
+
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import StreamingResponse
@@ -12,6 +14,14 @@ from pydantic import BaseModel
 
 from models import ChatRequest, FitnessProfile
 from orchestrator import get_fitness_profile, run_agent
+
+_vercel_url = os.getenv("VERCEL_URL", "")
+_allowed_origins = [
+    "http://localhost:3000",
+    "http://127.0.0.1:3000",
+]
+if _vercel_url:
+    _allowed_origins.extend([f"https://{_vercel_url}", f"https://www.{_vercel_url}"])
 
 
 @asynccontextmanager
@@ -28,7 +38,8 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000", "http://127.0.0.1:3000"],
+    allow_origins=_allowed_origins,
+    allow_origin_regex=r"https://.*\.vercel\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
