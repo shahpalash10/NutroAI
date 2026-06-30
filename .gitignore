@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+.venv/
+venv/
+
+# Build outputs
+.next/
+out/
+dist/
+build/
+*.egg-info/
+
+# Python
+__pycache__/
+*.py[cod]
+
+# Environment
+.env
+.env.local
+.env*.local
+
+# OS / IDE
+.DS_Store
+*.log
+.vercel

@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@theme {
+  --color-swiggy-orange: #fc8019;
+  --color-swiggy-orange-dark: #e67316;
+  --color-swiggy-orange-light: #fff5eb;
+  --color-swiggy-dark: #282c3f;
+  --color-swiggy-gray: #686b78;
+  --color-swiggy-light-gray: #93959f;
+  --color-swiggy-border: #e9e9eb;
+  --color-swiggy-bg: #ffffff;
+  --color-swiggy-page: #f0f0f5;
+  --color-swiggy-green: #60b246;
+  --color-swiggy-instamart: #007e7d;
+  --color-swiggy-rating: #48a839;
+  --font-sans: "Inter", system-ui, -apple-system, sans-serif;
+}
+
+@layer base {
+  * {
+    @apply border-swiggy-border;
+  }
+
+  html {
+    @apply scroll-smooth antialiased;
+  }
+
+  body {
+    @apply bg-swiggy-page text-swiggy-dark min-h-screen;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    @apply bg-swiggy-orange/20 text-swiggy-dark;
+  }
+
+  ::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 rounded-full;
+  }
+}
+
+@layer utilities {
+  .swiggy-card {
+    @apply bg-white rounded-2xl shadow-[0_2px_8px_rgba(0,0,0,0.08)];
+  }
+
+  .swiggy-shadow {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  }
+
+  .swiggy-shadow-lg {
+    box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.1);
+  }
+
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
