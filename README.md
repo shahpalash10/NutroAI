@@ -259,7 +259,7 @@ nutroAI/
 |----------|---------|-------------|
 | `BACKEND_URL` | `http://localhost:8000` | Python backend URL (frontend) |
 
-## Swiggy Builders Club Demo Script
+
 
 1. Start both servers (backend → frontend)
 2. Observe the **Wearable Stats** panel showing 700 kcal / 40g protein remaining
@@ -271,4 +271,3 @@ nutroAI/
 
 ---
 
-Built for **Swiggy Builders Club** · Nutro AI Engine v1.0.0
