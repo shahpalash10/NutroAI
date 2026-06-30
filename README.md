@@ -33,27 +33,30 @@ Nutro AI inspects a user's remaining daily macronutrient and caloric needs (simu
 - Python 3.12+
 - npm
 
-### 1. Backend
+### 1. Install & run (Next.js — includes agent)
 
 ```bash
-cd backend
-python -m venv .venv
-source .venv/bin/activate        # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
-uvicorn main:app --reload --port 8000
-```
-
-Verify: `curl http://localhost:8000/health`
-
-### 2. Frontend
-
-```bash
-cd frontend
 npm install
 npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)
+
+### 2. Optional: Python backend (local dev only)
+
+```bash
+cd backend
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+uvicorn main:app --reload --port 8000
+```
+
+### Deploy to Vercel
+
+- **Root Directory:** `.` (repo root — do NOT set to `backend` or `frontend`)
+- Framework auto-detects **Next.js**
+- `backend/` is ignored via `.vercelignore`
 
 ## Dashboard Components
 
@@ -220,37 +223,28 @@ Stream events (one JSON object per line):
 
 ### Frontend API Routes
 
-| Route | Proxies To |
-|-------|-----------|
-| `GET /api/profile` | `GET /api/profile` (backend) |
-| `POST /api/chat` | `POST /api/chat` (backend) → AI SDK data stream |
+| Route | Description |
+|-------|-------------|
+| `GET /api/profile` | Mock wearable fitness profile |
+| `POST /api/chat` | Agent orchestration → AI SDK data stream |
 
 ## Project Structure
 
 ```
 nutroAI/
-├── frontend/
-│   ├── app/
-│   │   ├── api/chat/route.ts      # AI SDK 6 streaming proxy
-│   │   ├── api/profile/route.ts   # Profile proxy
-│   │   ├── globals.css            # Cyberpunk theme + glassmorphism
-│   │   ├── layout.tsx
-│   │   └── page.tsx               # Bento grid dashboard
-│   ├── components/
-│   │   ├── WearableStatsCard.tsx  # Component A
-│   │   ├── CopilotChat.tsx        # Component B
-│   │   ├── TerminalMatrix.tsx     # Component C
-│   │   └── SwiggyCart.tsx         # Component D
-│   └── lib/
-│       ├── types.ts
-│       └── utils.ts
-├── backend/
-│   ├── main.py                    # FastAPI entry
-│   ├── orchestrator.py            # Multi-step agent loop
-│   ├── mcp_server.py              # Swiggy MCP simulation
-│   ├── models.py                  # Pydantic models
-│   └── requirements.txt
-└── README.md
+├── app/                           # Next.js App Router
+│   ├── api/chat/route.ts          # AI SDK streaming agent
+│   ├── api/profile/route.ts
+│   ├── page.tsx                   # Swiggy UI dashboard
+│   └── layout.tsx
+├── components/                    # UI components
+├── lib/agent/                     # MCP + orchestrator (runs on Vercel)
+├── backend/                       # Python FastAPI (local dev only)
+│   ├── main.py
+│   ├── orchestrator.py
+│   └── mcp_server.py
+├── vercel.json
+└── .vercelignore                  # Excludes backend from deploy
 ```
 
 ## Environment Variables

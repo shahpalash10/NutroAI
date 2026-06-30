@@ -2,9 +2,35 @@
   "name": "nutro-ai",
   "version": "1.0.0",
   "private": true,
+  "engines": {
+    "node": ">=20"
+  },
   "scripts": {
-    "dev:backend": "cd backend && source .venv/bin/activate && uvicorn main:app --reload --port 8000",
-    "dev:frontend": "cd frontend && npm run dev",
-    "install:all": "cd backend && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt && cd ../frontend && npm install"
+    "dev": "next dev --port 3000",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "dev:backend": "cd backend && source .venv/bin/activate && uvicorn main:app --reload --port 8000"
+  },
+  "dependencies": {
+    "@ai-sdk/react": "^1.2.12",
+    "ai": "^4.3.16",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.511.0",
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3.3.1",
+    "@tailwindcss/postcss": "^4.1.8",
+    "@types/node": "^22.15.29",
+    "@types/react": "^19.1.6",
+    "@types/react-dom": "^19.1.5",
+    "eslint": "^9.28.0",
+    "eslint-config-next": "^15.3.3",
+    "tailwindcss": "^4.1.8",
+    "typescript": "^5.8.3"
   }
 }
