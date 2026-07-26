@@ -72,7 +72,7 @@ export function CopilotChat({
           <h2 className="el_headingBlock_title">INTERVIEW & COPILOT CHAT</h2>
         </div>
         <div className="flex items-center gap-3">
-          <span className="el_headingBlock_sub uppercase hidden sm:inline">AI対談アシスタント // AI COPILOT</span>
+          <span className="el_headingBlock_sub uppercase hidden sm:inline">AI COPILOT</span>
           {messages.length > 0 && onClearChat && (
             <button
               type="button"

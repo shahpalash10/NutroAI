@@ -69,7 +69,7 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
           <h2 className="el_headingBlock_title">OUR BUSINESS & TELEMETRY</h2>
         </div>
         <div className="flex items-center gap-3">
-          <span className="el_headingBlock_sub uppercase hidden sm:inline">リアルタイムマクロ統合 // WEARABLE SYNC</span>
+          <span className="el_headingBlock_sub uppercase hidden sm:inline">WEARABLE SYNC</span>
           <span className="px-2 py-0.5 bg-red-600/20 text-red-500 border border-red-600/40 text-xs font-mono font-bold">
             {selectedGoal.toUpperCase()}
           </span>

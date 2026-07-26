@@ -28,10 +28,10 @@ export function TerminalMatrix({ logs, active }: TerminalMatrixProps) {
       <div className="el_headingBlock">
         <div className="flex items-baseline gap-2">
           <span className="el_headingBlock_num">04-</span>
-          <h2 className="el_headingBlock_title">SPECIAL MCP DEBUG MATRIX</h2>
+          <h2 className="el_headingBlock_title">MCP SERVERS(TEST)</h2>
         </div>
         <div className="flex items-center gap-3 font-mono text-xs">
-          <span className="el_headingBlock_sub uppercase hidden sm:inline">スペシャルコンテンツ // JSON-RPC 2.0 PROTOCOL STREAM</span>
+          <span className="el_headingBlock_sub uppercase hidden sm:inline">JSON-RPC 2.0 PROTOCOL STREAM</span>
           {active && <span className="px-2 py-0.5 bg-red-600 text-white font-bold ff_eng">EXECUTING</span>}
         </div>
       </div>
