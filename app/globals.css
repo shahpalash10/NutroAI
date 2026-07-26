@@ -3,80 +3,111 @@
 @theme {
   --color-coniq-red: #eb0a1e;
   --color-coniq-orange: #fc8019;
-  --color-coniq-dark: #0a0a0a;
-  --color-coniq-card: #121212;
-  --color-coniq-border: rgba(255, 255, 255, 0.15);
+  --color-coniq-dark: #07080a;
+  --color-coniq-card: #0f1117;
+  --color-coniq-border: rgba(255, 255, 255, 0.1);
   --font-sans: var(--font-sans), "Inter", sans-serif;
   --font-hanken: var(--font-hanken), "Hanken Grotesk", sans-serif;
 }
 
 @layer base {
   * {
-    border-color: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.1);
   }
 
   html {
-    scroll-behavior: smooth;
+    scroll-behavior: initial;
     -webkit-font-smoothing: antialiased;
-    background-color: #0a0a0a;
+    background-color: #07080a;
+  }
+
+  /* Lenis recommended CSS */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
   }
 
   body {
-    background-color: #0a0a0a;
+    background-color: #07080a;
     color: #ffffff;
     font-family: var(--font-sans);
     min-height: 100vh;
+    overflow-x: hidden;
   }
 
   ::-webkit-scrollbar {
-    width: 5px;
-    height: 5px;
+    width: 4px;
+    height: 4px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #0a0a0a;
+    background: #07080a;
   }
 
   ::-webkit-scrollbar-thumb {
     background: #eb0a1e;
+    border-radius: 9999px;
   }
 }
 
 .ff_eng {
   font-family: var(--font-hanken), "Hanken Grotesk", sans-serif;
-  font-weight: 800;
-  letter-spacing: 0.05em;
+  font-weight: 900;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
-/* Coniq Pro Infinite Scrolling Background Text Ticker */
-@keyframes marqueeScroll {
-  0% {
-    transform: translateX(0%);
-  }
-  100% {
-    transform: translateX(-50%);
-  }
+/* Clip-Path Mask Reveals */
+.clip-reveal-hidden {
+  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
+  transform: translateY(40px);
+  opacity: 0;
+  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.animate-marquee {
-  display: flex;
-  width: 200%;
-  animation: marqueeScroll 28s linear infinite;
+.clip-reveal-visible {
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  transform: translateY(0);
+  opacity: 1;
 }
 
-.animate-marquee:hover {
-  animation-play-state: paused;
+/* Image Reveal Mask */
+.img-mask-container {
+  overflow: hidden;
+  position: relative;
 }
 
-/* Coniq Pro Masked Hover Button */
+.img-mask-container img {
+  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), scale 1.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.img-mask-container:hover img {
+  scale: 1.06;
+}
+
+/* Coniq Pro Masked Button */
 .bl_maskBtn {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #141414;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: #11141c;
+  border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 1.25rem 1.5rem;
   overflow: hidden;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
@@ -86,12 +117,14 @@
   background: #eb0a1e;
   border-color: #eb0a1e;
   color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px -10px rgba(235, 10, 30, 0.4);
 }
 
 .bl_maskBtn .arrow-box {
   width: 36px;
   height: 36px;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.08);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -101,14 +134,14 @@
 .bl_maskBtn:hover .arrow-box {
   background: #ffffff;
   color: #eb0a1e;
-  transform: translate(2px, -2px);
+  transform: translate(3px, -3px);
 }
 
 /* Coniq Pro Section Heading */
 .el_headingBlock {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-  padding-bottom: 0.75rem;
-  margin-bottom: 1.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+  padding-bottom: 0.85rem;
+  margin-bottom: 2rem;
   display: flex;
   align-items: baseline;
   justify-content: space-between;
@@ -118,15 +151,15 @@
   font-family: var(--font-hanken);
   font-weight: 900;
   color: #eb0a1e;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   margin-right: 0.5rem;
 }
 
 .el_headingBlock_title {
   font-family: var(--font-hanken);
-  font-weight: 800;
-  font-size: 1.5rem;
-  letter-spacing: 0.05em;
+  font-weight: 900;
+  font-size: 1.75rem;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
   color: #ffffff;
 }
@@ -134,16 +167,19 @@
 .el_headingBlock_sub {
   font-size: 0.75rem;
   color: #888888;
-  letter-spacing: 0.08em;
+  letter-spacing: 0.1em;
 }
 
-/* Coniq Pro Card Container */
-.coniq-card {
-  background: #111111;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+/* Cinematic Glass Card */
+.cinematic-card {
+  background: rgba(15, 17, 23, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.coniq-card:hover {
-  border-color: rgba(235, 10, 30, 0.4);
+.cinematic-card:hover {
+  border-color: rgba(235, 10, 30, 0.35);
+  box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
 }

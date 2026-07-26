@@ -1,9 +1,10 @@
 "use client";
 
 import { useState } from "react";
-import { Flame, Dumbbell, RefreshCw, Zap } from "lucide-react";
+import { motion } from "framer-motion";
+import { Flame, Dumbbell, RefreshCw, Zap, Check } from "lucide-react";
 import { macroPercent } from "@/lib/utils";
-import type { FitnessProfile } from "@/lib/types";
+import type { FitnessProfile, FitnessGoalType } from "@/lib/types";
 
 interface WearableStatsCardProps {
   profile: FitnessProfile | null;
@@ -11,12 +12,21 @@ interface WearableStatsCardProps {
   onOpenSettings?: () => void;
 }
 
+const GOALS: { id: FitnessGoalType; label: string; calories: number; protein: number }[] = [
+  { id: "bulking", label: "MUSCLE BULKING", calories: 2800, protein: 180 },
+  { id: "cutting", label: "FAT CUTTING", calories: 2000, protein: 175 },
+  { id: "recomp", label: "BODY RECOMP", calories: 2500, protein: 160 },
+  { id: "keto", label: "STRICT KETO", calories: 2200, protein: 150 },
+];
+
 export function WearableStatsCard({ profile, loading, onOpenSettings }: WearableStatsCardProps) {
   const [syncing, setSyncing] = useState(false);
+  const [selectedGoal, setSelectedGoal] = useState<FitnessGoalType>(profile?.goal_type ?? "bulking");
 
   const consumed = profile?.consumed ?? { calories: 1780, protein: 118, carbs: 175, fats: 52 };
-  const targets = profile?.targets ?? { calories: 2500, protein: 160, carbs: 250, fats: 80 };
-  const remaining = profile?.remaining ?? {
+  const baseTarget = GOALS.find((g) => g.id === selectedGoal) ?? GOALS[0];
+  const targets = profile?.targets ?? { calories: baseTarget.calories, protein: baseTarget.protein, carbs: 250, fats: 80 };
+  const remaining = {
     calories: Math.max(0, targets.calories - consumed.calories),
     protein: Math.max(0, targets.protein - consumed.protein),
     carbs: Math.max(0, targets.carbs - consumed.carbs),
@@ -35,18 +45,23 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
 
   if (loading) {
     return (
-      <div className="coniq-card p-6 animate-pulse space-y-4">
+      <div className="cinematic-card p-8 animate-pulse space-y-4">
         <div className="h-6 bg-slate-800 rounded w-1/3" />
-        <div className="h-32 bg-slate-800/50 rounded" />
+        <div className="h-36 bg-slate-800/50 rounded" />
       </div>
     );
   }
 
-  const goalLabel = profile?.goal_type ? profile.goal_type.toUpperCase() : "BULKING";
   const wearableLabel = profile?.wearable_provider ? profile.wearable_provider.replace("_", " ").toUpperCase() : "APPLE HEALTH";
 
   return (
-    <div className="coniq-card p-6 border border-white/15">
+    <motion.div
+      initial={{ opacity: 0, y: 30 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, margin: "-50px" }}
+      transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+      className="cinematic-card p-6 sm:p-8"
+    >
       {/* Toyota Coniq Pro Section Heading */}
       <div className="el_headingBlock">
         <div className="flex items-baseline gap-2">
@@ -56,20 +71,44 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
         <div className="flex items-center gap-3">
           <span className="el_headingBlock_sub uppercase hidden sm:inline">リアルタイムマクロ統合 // WEARABLE SYNC</span>
           <span className="px-2 py-0.5 bg-red-600/20 text-red-500 border border-red-600/40 text-xs font-mono font-bold">
-            {goalLabel}
+            {selectedGoal.toUpperCase()}
           </span>
         </div>
       </div>
 
+      {/* Goal Selector Chips */}
+      <div className="flex flex-wrap items-center gap-2 mb-6 font-mono text-xs">
+        <span className="text-slate-400 text-[11px] mr-2">DIET PRESET:</span>
+        {GOALS.map((g) => {
+          const isSelected = selectedGoal === g.id;
+          return (
+            <motion.button
+              key={g.id}
+              whileHover={{ scale: 1.03, y: -1 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={() => setSelectedGoal(g.id)}
+              className={`px-3 py-1.5 border transition-all text-[11px] flex items-center gap-1.5 ${
+                isSelected
+                  ? "bg-red-600 text-white border-red-600 font-bold ff_eng shadow-lg shadow-red-600/20"
+                  : "bg-[#141620] border-white/10 text-slate-400 hover:text-white"
+              }`}
+            >
+              {isSelected && <Check className="w-3 h-3" />}
+              <span>{g.label}</span>
+            </motion.button>
+          );
+        })}
+      </div>
+
       {/* Main Metric Section */}
       <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pt-2">
-        {/* Left: Concentric Progress Rings with Hanken Grotesk Numbers */}
-        <div className="md:col-span-5 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/15 pb-6 md:pb-0 md:pr-6">
-          <div className="relative w-40 h-40 flex items-center justify-center">
+        {/* Left: Concentric Progress Rings */}
+        <div className="md:col-span-5 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/10 pb-6 md:pb-0 md:pr-6">
+          <div className="relative w-44 h-44 flex items-center justify-center">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               {/* Outer Ring: Calories */}
-              <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.08)" strokeWidth="7" fill="none" />
-              <circle
+              <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.06)" strokeWidth="7" fill="none" />
+              <motion.circle
                 cx="50"
                 cy="50"
                 r="42"
@@ -77,14 +116,15 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 strokeWidth="7"
                 fill="none"
                 strokeDasharray="263.89"
-                strokeDashoffset={263.89 - (263.89 * caloriesPct) / 100}
+                initial={{ strokeDashoffset: 263.89 }}
+                animate={{ strokeDashoffset: 263.89 - (263.89 * caloriesPct) / 100 }}
+                transition={{ duration: 1.2, ease: "easeInOut" }}
                 strokeLinecap="square"
-                className="transition-all duration-1000 ease-out"
               />
 
               {/* Middle Ring: Protein */}
-              <circle cx="50" cy="50" r="31" stroke="rgba(255,255,255,0.08)" strokeWidth="6" fill="none" />
-              <circle
+              <circle cx="50" cy="50" r="31" stroke="rgba(255,255,255,0.06)" strokeWidth="6" fill="none" />
+              <motion.circle
                 cx="50"
                 cy="50"
                 r="31"
@@ -92,14 +132,15 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 strokeWidth="6"
                 fill="none"
                 strokeDasharray="194.78"
-                strokeDashoffset={194.78 - (194.78 * proteinPct) / 100}
+                initial={{ strokeDashoffset: 194.78 }}
+                animate={{ strokeDashoffset: 194.78 - (194.78 * proteinPct) / 100 }}
+                transition={{ duration: 1.2, delay: 0.1, ease: "easeInOut" }}
                 strokeLinecap="square"
-                className="transition-all duration-1000 ease-out"
               />
 
               {/* Inner Ring: Carbs */}
-              <circle cx="50" cy="50" r="21" stroke="rgba(255,255,255,0.08)" strokeWidth="5" fill="none" />
-              <circle
+              <circle cx="50" cy="50" r="21" stroke="rgba(255,255,255,0.06)" strokeWidth="5" fill="none" />
+              <motion.circle
                 cx="50"
                 cy="50"
                 r="21"
@@ -107,18 +148,19 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 strokeWidth="5"
                 fill="none"
                 strokeDasharray="131.95"
-                strokeDashoffset={131.95 - (131.95 * carbsPct) / 100}
+                initial={{ strokeDashoffset: 131.95 }}
+                animate={{ strokeDashoffset: 131.95 - (131.95 * carbsPct) / 100 }}
+                transition={{ duration: 1.2, delay: 0.2, ease: "easeInOut" }}
                 strokeLinecap="square"
-                className="transition-all duration-1000 ease-out"
               />
             </svg>
 
             {/* Ring Center Text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-2xl font-black text-white ff_eng leading-none">
+              <span className="text-3xl font-black text-white ff_eng leading-none">
                 {Math.round(remaining.protein)}G
               </span>
-              <span className="text-[10px] font-bold text-emerald-400 ff_eng tracking-widest mt-1">
+              <span className="text-[10px] font-extrabold text-emerald-400 ff_eng tracking-widest mt-1">
                 PROTEIN LEFT
               </span>
             </div>
@@ -137,7 +179,7 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
           </div>
         </div>
 
-        {/* Right: Editorial Macro Metric Progress Bars */}
+        {/* Right: Macro Progress Bars Grid */}
         <div className="md:col-span-7 space-y-4">
           {/* Calories Row */}
           <div className="space-y-1">
@@ -150,8 +192,13 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 <span className="text-red-500 ml-2 font-bold">({Math.round(remaining.calories)} REMAINING)</span>
               </span>
             </div>
-            <div className="h-2 bg-[#1a1a1a] rounded-none border border-white/10 p-0.5">
-              <div className="h-full bg-red-600 transition-all duration-700" style={{ width: `${caloriesPct}%` }} />
+            <div className="h-2 bg-[#1a1d28] border border-white/10 p-0.5">
+              <motion.div
+                className="h-full bg-red-600"
+                initial={{ width: 0 }}
+                animate={{ width: `${caloriesPct}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+              />
             </div>
           </div>
 
@@ -166,8 +213,13 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 <span className="text-emerald-400 ml-2 font-bold">({Math.round(remaining.protein)}G REMAINING)</span>
               </span>
             </div>
-            <div className="h-2 bg-[#1a1a1a] rounded-none border border-white/10 p-0.5">
-              <div className="h-full bg-emerald-500 transition-all duration-700" style={{ width: `${proteinPct}%` }} />
+            <div className="h-2 bg-[#1a1d28] border border-white/10 p-0.5">
+              <motion.div
+                className="h-full bg-emerald-500"
+                initial={{ width: 0 }}
+                animate={{ width: `${proteinPct}%` }}
+                transition={{ duration: 1, delay: 0.1, ease: "easeOut" }}
+              />
             </div>
           </div>
 
@@ -178,8 +230,13 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 <span className="font-bold text-white uppercase ff_eng">CARBS</span>
                 <span className="text-amber-400">{Math.round(remaining.carbs)}g left</span>
               </div>
-              <div className="h-1.5 bg-[#1a1a1a] border border-white/10">
-                <div className="h-full bg-amber-400 transition-all duration-700" style={{ width: `${carbsPct}%` }} />
+              <div className="h-1.5 bg-[#1a1d28] border border-white/10">
+                <motion.div
+                  className="h-full bg-amber-400"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${carbsPct}%` }}
+                  transition={{ duration: 1, delay: 0.2, ease: "easeOut" }}
+                />
               </div>
             </div>
 
@@ -188,13 +245,18 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
                 <span className="font-bold text-white uppercase ff_eng">FATS</span>
                 <span className="text-rose-400">{Math.round(remaining.fats)}g left</span>
               </div>
-              <div className="h-1.5 bg-[#1a1a1a] border border-white/10">
-                <div className="h-full bg-rose-400 transition-all duration-700" style={{ width: `${fatsPct}%` }} />
+              <div className="h-1.5 bg-[#1a1d28] border border-white/10">
+                <motion.div
+                  className="h-full bg-rose-400"
+                  initial={{ width: 0 }}
+                  animate={{ width: `${fatsPct}%` }}
+                  transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                />
               </div>
             </div>
           </div>
 
-          {/* Footer Callout */}
+          {/* Workout History */}
           {profile?.last_workout && (
             <div className="pt-2 flex items-center justify-between text-xs font-mono border-t border-white/10">
               <div className="flex items-center gap-2 text-slate-300">
@@ -208,6 +270,6 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
           )}
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
