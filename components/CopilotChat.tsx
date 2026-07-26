@@ -65,7 +65,7 @@ export function CopilotChat({
 
   return (
     <div className="coniq-card p-6 border border-white/15 flex flex-col h-[520px]">
-      {/* Toyota Coniq Pro Section Heading */}
+      {/* Section Heading */}
       <div className="el_headingBlock">
         <div className="flex items-baseline gap-2">
           <span className="el_headingBlock_num">02-</span>
@@ -77,7 +77,7 @@ export function CopilotChat({
             <button
               type="button"
               onClick={onClearChat}
-              className="text-slate-400 hover:text-red-500 transition-colors"
+              className="text-slate-400 hover:text-[#fc8019] transition-colors"
               title="Clear History"
             >
               <Trash2 className="w-4 h-4" />
@@ -91,16 +91,16 @@ export function CopilotChat({
         {messages.length === 0 && (
           <div className="space-y-4 py-2">
             <div className="flex gap-3">
-              <div className="w-8 h-8 bg-red-600 flex items-center justify-center text-white font-bold shrink-0">
+              <div className="w-8 h-8 bg-[#fc8019] flex items-center justify-center text-white font-bold shrink-0 rounded">
                 AI
               </div>
-              <div className="bg-[#181818] border border-white/15 p-4 max-w-[85%] leading-relaxed text-slate-200">
+              <div className="bg-[#141620] border border-white/15 p-4 max-w-[85%] leading-relaxed text-slate-200 rounded-lg">
                 <p className="font-bold text-white mb-1 ff_eng text-sm">
                   WELCOME // NUTRO COPILOT ENGAGED
                 </p>
                 <p>
-                  Synced wearable budget: <span className="text-emerald-400 font-bold">42g Protein</span> &{" "}
-                  <span className="text-red-500 font-bold">720 kcal</span> left today.
+                  Synced wearable budget: <span className="text-[#60b246] font-bold">42g Protein</span> &{" "}
+                  <span className="text-[#fc8019] font-bold">720 kcal</span> left today.
                 </p>
                 <p className="mt-2 text-slate-400 text-[11px]">
                   State your meal or grocery query to query Swiggy Food & Instamart MCP servers.
@@ -108,7 +108,7 @@ export function CopilotChat({
               </div>
             </div>
 
-            {/* Toyota Coniq Pro Style Masked Prompt Cards */}
+            {/* Prompt Cards */}
             <div className="pl-11 space-y-2">
               <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ff_eng">
                 RECOMMENDED ACTION PROMPTS
@@ -122,7 +122,7 @@ export function CopilotChat({
                     className="bl_maskBtn text-left group"
                   >
                     <div>
-                      <span className="text-[10px] text-red-500 font-bold ff_eng block">{p.label}</span>
+                      <span className="text-[10px] text-[#fc8019] font-bold ff_eng block">{p.label}</span>
                       <span className="text-xs text-white font-sans font-medium line-clamp-1">{p.desc}</span>
                     </div>
                     <div className="arrow-box">
@@ -145,8 +145,8 @@ export function CopilotChat({
             >
               <div
                 className={cn(
-                  "w-8 h-8 flex items-center justify-center font-bold text-xs shrink-0 border border-white/15",
-                  isUser ? "bg-[#222222] text-white" : "bg-red-600 text-white"
+                  "w-8 h-8 flex items-center justify-center font-bold text-xs shrink-0 border border-white/15 rounded",
+                  isUser ? "bg-[#222636] text-white" : "bg-[#fc8019] text-white"
                 )}
               >
                 {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
@@ -154,10 +154,10 @@ export function CopilotChat({
 
               <div
                 className={cn(
-                  "p-3.5 text-xs leading-relaxed max-w-[85%]",
+                  "p-3.5 text-xs leading-relaxed max-w-[85%] rounded-lg",
                   isUser
-                    ? "bg-red-600 text-white font-sans"
-                    : "bg-[#161616] border border-white/15 text-slate-200 font-sans"
+                    ? "bg-[#fc8019] text-white font-sans font-medium shadow-md shadow-orange-500/10"
+                    : "bg-[#141620] border border-white/15 text-slate-200 font-sans"
                 )}
               >
                 <div className="whitespace-pre-wrap space-y-1">
@@ -165,7 +165,7 @@ export function CopilotChat({
                     if (line.startsWith("• ")) {
                       return (
                         <div key={idx} className="flex items-start gap-1.5 pl-1">
-                          <span className="text-red-500 font-bold">•</span>
+                          <span className="text-[#fc8019] font-bold">•</span>
                           <span>{parseBold(line.slice(2))}</span>
                         </div>
                       );
@@ -180,10 +180,10 @@ export function CopilotChat({
 
         {isLoading && (
           <div className="flex gap-3">
-            <div className="w-8 h-8 bg-red-600 flex items-center justify-center text-white shrink-0">
+            <div className="w-8 h-8 bg-[#fc8019] flex items-center justify-center text-white shrink-0 rounded">
               <Sparkles className="w-4 h-4 animate-spin" />
             </div>
-            <div className="bg-[#161616] border border-white/15 p-3 flex items-center gap-2 text-xs text-red-500 font-mono">
+            <div className="bg-[#141620] border border-white/15 p-3 flex items-center gap-2 text-xs text-[#fc8019] font-mono rounded-lg">
               <span className="ff_eng">EXECUTING MCP TOOL DISPATCH...</span>
             </div>
           </div>
@@ -193,12 +193,12 @@ export function CopilotChat({
       {/* Input Field Bar */}
       <form onSubmit={onSubmit} className="pt-3 border-t border-white/15">
         {isRecording && (
-          <div className="mb-2 p-2 bg-red-600/20 border border-red-600 text-red-400 text-xs font-mono flex items-center gap-2 animate-pulse">
+          <div className="mb-2 p-2 bg-[#fc8019]/20 border border-[#fc8019] text-[#fc8019] text-xs font-mono flex items-center gap-2 animate-pulse rounded">
             <Mic className="w-3.5 h-3.5" />
             <span className="ff_eng">LISTENING... SPEAK YOUR QUERY</span>
           </div>
         )}
-        <div className="flex items-center gap-2 bg-[#141414] border border-white/15 p-2 focus-within:border-red-600 transition-colors">
+        <div className="flex items-center gap-2 bg-[#141620] border border-white/15 p-2 focus-within:border-[#fc8019] transition-colors rounded-lg">
           <textarea
             ref={inputRef}
             value={input}
@@ -218,7 +218,7 @@ export function CopilotChat({
           <button
             type="button"
             onClick={toggleVoiceRecording}
-            className={cn("p-2 text-slate-400 hover:text-white transition-colors", isRecording && "text-red-500")}
+            className={cn("p-2 text-slate-400 hover:text-white transition-colors", isRecording && "text-[#fc8019]")}
             title="Voice Input"
           >
             <Mic className="w-4 h-4" />
@@ -227,7 +227,7 @@ export function CopilotChat({
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 text-white font-extrabold ff_eng text-xs flex items-center gap-1.5 transition-colors"
+            className="px-4 py-2 bg-[#fc8019] hover:bg-[#e67316] disabled:opacity-40 text-white font-extrabold ff_eng text-xs flex items-center gap-1.5 transition-colors rounded"
           >
             <span>SEND</span>
             <Send className="w-3.5 h-3.5" />
@@ -245,7 +245,7 @@ function parseBold(text: string) {
       return <strong key={i} className="font-bold text-white">{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith("*") && part.endsWith("*")) {
-      return <em key={i} className="italic text-red-400">{part.slice(1, -1)}</em>;
+      return <em key={i} className="italic text-[#fc8019]">{part.slice(1, -1)}</em>;
     }
     return part;
   });

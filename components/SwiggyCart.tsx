@@ -85,14 +85,14 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
           <h2 className="el_headingBlock_title">SWIGGY MCP CART & CHECKOUT</h2>
         </div>
         <div className="flex items-center gap-2">
-          <MapPin className="w-3.5 h-3.5 text-red-500 shrink-0" />
+          <MapPin className="w-3.5 h-3.5 text-[#fc8019] shrink-0" />
           <select
             value={selectedAddressId}
             onChange={(e) => setSelectedAddressId(e.target.value)}
-            className="bg-[#181818] border border-white/15 text-white text-xs font-mono px-2 py-1 outline-none cursor-pointer"
+            className="bg-[#141620] border border-white/15 text-white text-xs font-mono px-2 py-1 outline-none cursor-pointer rounded"
           >
             {ADDRESSES.map((a) => (
-              <option key={a.address_id} value={a.address_id} className="bg-[#111111]">
+              <option key={a.address_id} value={a.address_id} className="bg-[#12141d]">
                 {a.label} ({a.line1.slice(0, 12)}...)
               </option>
             ))}
@@ -112,7 +112,7 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
           items.map((item) => (
             <div
               key={item.id}
-              className="p-3.5 bg-[#161616] border border-white/15 flex items-center justify-between gap-3 group"
+              className="p-3.5 bg-[#141620] border border-white/15 flex items-center justify-between gap-3 group rounded-lg"
             >
               {/* Item Details */}
               <div className="flex items-center gap-3 min-w-0">
@@ -120,23 +120,23 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
                   <img
                     src={item.image_url}
                     alt={item.name}
-                    className="w-12 h-12 object-cover border border-white/15 shrink-0"
+                    className="w-12 h-12 object-cover border border-white/15 shrink-0 rounded"
                   />
                 ) : (
-                  <div className="w-12 h-12 bg-[#222] border border-white/15 flex items-center justify-center text-red-500 font-bold shrink-0">
+                  <div className="w-12 h-12 bg-[#222] border border-white/15 flex items-center justify-center text-[#fc8019] font-bold shrink-0 rounded">
                     🍱
                   </div>
                 )}
 
                 <div className="min-w-0 font-mono">
-                  <h3 className="text-xs font-bold text-white uppercase truncate group-hover:text-red-500 transition-colors">
+                  <h3 className="text-xs font-bold text-white uppercase truncate group-hover:text-[#fc8019] transition-colors">
                     {item.name}
                   </h3>
                   <p className="text-[11px] text-slate-400 truncate">
                     {item.restaurant ?? (item.source === "food" ? "Healthy Spot" : "Instamart")}
                   </p>
                   <div className="flex items-center gap-2 mt-1 text-[10px]">
-                    <span className="text-emerald-400 font-bold">{item.macros.protein * item.quantity}g Protein</span>
+                    <span className="text-[#60b246] font-bold">{item.macros.protein * item.quantity}g Protein</span>
                     <span>•</span>
                     <span className="text-slate-400">{item.macros.calories * item.quantity} kcal</span>
                   </div>
@@ -145,12 +145,12 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
 
               {/* Quantity Modifier */}
               <div className="flex items-center gap-3 shrink-0">
-                <div className="flex items-center bg-[#0a0a0a] border border-white/15">
+                <div className="flex items-center bg-[#12141d] border border-white/15 rounded">
                   <button
                     onClick={() => updateQuantity(item.id, -1)}
                     className="p-1 text-slate-400 hover:text-white transition-colors"
                   >
-                    {item.quantity === 1 ? <Trash2 className="w-3 h-3 text-red-500" /> : <Minus className="w-3 h-3" />}
+                    {item.quantity === 1 ? <Trash2 className="w-3 h-3 text-[#fc8019]" /> : <Minus className="w-3 h-3" />}
                   </button>
                   <span className="w-6 text-center text-xs font-mono font-bold text-white">{item.quantity}</span>
                   <button
@@ -170,14 +170,14 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
         )}
       </div>
 
-      {/* Cart Summary & Coniq Pro Masked Checkout Button */}
+      {/* Cart Summary & Swiggy Masked Checkout Button */}
       {items.length > 0 && (
         <div className="pt-3 border-t border-white/15 space-y-3 font-mono">
-          <div className="flex items-center justify-between text-xs bg-[#161616] p-2.5 border border-white/15">
+          <div className="flex items-center justify-between text-xs bg-[#141620] p-2.5 border border-white/15 rounded-lg">
             <span className="text-slate-400 uppercase">TOTAL MACROS:</span>
             <div className="flex items-center gap-3 font-bold">
-              <span className="text-emerald-400">{Math.round(cart?.total_macros.protein ?? 0)}G PROTEIN</span>
-              <span className="text-red-500">{Math.round(cart?.total_macros.calories ?? 0)} KCAL</span>
+              <span className="text-[#60b246]">{Math.round(cart?.total_macros.protein ?? 0)}G PROTEIN</span>
+              <span className="text-[#fc8019]">{Math.round(cart?.total_macros.calories ?? 0)} KCAL</span>
             </div>
           </div>
 
@@ -200,13 +200,13 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
         </div>
       )}
 
-      {/* Coniq Pro Checkout Confirmation Modal */}
+      {/* Swiggy Checkout Confirmation Modal */}
       {showCheckoutModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/90 backdrop-blur-md">
-          <div className="bg-[#111111] border border-white/20 w-full max-w-md p-6 space-y-5 font-mono">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md">
+          <div className="bg-[#1b1e2b] border border-white/20 w-full max-w-md p-6 space-y-5 font-mono rounded-xl">
             {checkoutComplete ? (
               <div className="text-center space-y-4 py-4">
-                <div className="w-14 h-14 bg-emerald-500/20 border border-emerald-500 flex items-center justify-center mx-auto text-emerald-400">
+                <div className="w-14 h-14 bg-[#60b246]/20 border border-[#60b246] flex items-center justify-center mx-auto text-[#60b246] rounded-full">
                   <CheckCircle className="w-8 h-8" />
                 </div>
                 <div>
@@ -215,7 +215,7 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
                     DELIVERING TO <strong>{selectedAddr.label}</strong> IN ~22 MINS
                   </p>
                 </div>
-                <div className="p-3 bg-[#0a0a0a] border border-white/10 text-xs text-emerald-400">
+                <div className="p-3 bg-[#12141d] border border-white/10 text-xs text-[#60b246] rounded">
                   SESSION ID: #SWIGGY-NUTRO-{Math.floor(Math.random() * 900000 + 100000)}
                 </div>
               </div>
@@ -223,21 +223,21 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
               <div className="space-y-4">
                 <div className="flex items-center justify-between border-b border-white/15 pb-3">
                   <h3 className="text-sm font-black text-white ff_eng">SWIGGY EXPRESS CHECKOUT</h3>
-                  <span className="text-[10px] font-bold px-2 py-0.5 bg-red-600 text-white ff_eng">VERIFIED</span>
+                  <span className="text-[10px] font-bold px-2 py-0.5 bg-[#fc8019] text-white ff_eng rounded">VERIFIED</span>
                 </div>
 
                 <div className="space-y-2 text-xs text-slate-300">
                   <p className="flex items-center gap-2">
-                    <MapPin className="w-3.5 h-3.5 text-red-500" />
+                    <MapPin className="w-3.5 h-3.5 text-[#fc8019]" />
                     <span>DELIVERY: <strong>{selectedAddr.label}</strong> ({selectedAddr.line1})</span>
                   </p>
                   <p className="flex items-center gap-2">
-                    <Clock className="w-3.5 h-3.5 text-emerald-400" />
+                    <Clock className="w-3.5 h-3.5 text-[#60b246]" />
                     <span>ESTIMATED DELIVERY: ~22 MINS</span>
                   </p>
                 </div>
 
-                <div className="bg-[#0a0a0a] p-3 border border-white/15 space-y-2 text-xs">
+                <div className="bg-[#12141d] p-3 border border-white/15 space-y-2 text-xs rounded">
                   {items.map((it) => (
                     <div key={it.id} className="flex justify-between text-slate-300">
                       <span>{it.quantity}x {it.name}</span>
@@ -246,20 +246,20 @@ export function SwiggyCart({ cart, loading, onUpdateCart }: SwiggyCartProps) {
                   ))}
                   <div className="border-t border-white/15 pt-2 flex justify-between font-bold text-white">
                     <span>TOTAL AMOUNT</span>
-                    <span className="text-red-500">₹{cart?.total_price}</span>
+                    <span className="text-[#fc8019]">₹{cart?.total_price}</span>
                   </div>
                 </div>
 
                 <div className="flex gap-3 pt-2">
                   <button
                     onClick={() => setShowCheckoutModal(false)}
-                    className="flex-1 py-2.5 bg-[#222222] text-xs font-bold ff_eng text-slate-300 hover:text-white"
+                    className="flex-1 py-2.5 bg-[#252a3b] text-xs font-bold ff_eng text-slate-300 hover:text-white rounded"
                   >
                     CANCEL
                   </button>
                   <button
                     onClick={confirmCheckout}
-                    className="flex-1 py-2.5 bg-red-600 hover:bg-red-700 text-xs font-extrabold ff_eng text-white flex items-center justify-center gap-2"
+                    className="flex-1 py-2.5 bg-[#fc8019] hover:bg-[#e67316] text-xs font-extrabold ff_eng text-white flex items-center justify-center gap-2 rounded shadow-lg shadow-orange-500/20"
                   >
                     <ShieldCheck className="w-4 h-4" /> PAY & ORDER
                   </button>

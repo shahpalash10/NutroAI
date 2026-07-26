@@ -32,20 +32,20 @@ export function TerminalMatrix({ logs, active }: TerminalMatrixProps) {
         </div>
         <div className="flex items-center gap-3 font-mono text-xs">
           <span className="el_headingBlock_sub uppercase hidden sm:inline">JSON-RPC 2.0 PROTOCOL STREAM</span>
-          {active && <span className="px-2 py-0.5 bg-red-600 text-white font-bold ff_eng">EXECUTING</span>}
+          {active && <span className="px-2 py-0.5 bg-[#fc8019] text-white font-bold ff_eng rounded">EXECUTING</span>}
         </div>
       </div>
 
       {/* Topology Nodes Indicator Bar */}
-      <div className="px-4 py-2.5 bg-[#161616] border border-white/15 flex items-center justify-between text-xs font-mono mb-4">
+      <div className="px-4 py-2.5 bg-[#141620] border border-white/15 flex items-center justify-between text-xs font-mono mb-4 rounded-lg">
         <div className="flex items-center gap-2 text-slate-300">
-          <Cpu className="w-4 h-4 text-red-500" />
+          <Cpu className="w-4 h-4 text-[#fc8019]" />
           <span className="font-bold text-white uppercase">NUTRO ORCHESTRATOR</span>
         </div>
-        <div className="h-0.5 flex-1 mx-4 bg-gradient-to-r from-red-600 via-emerald-500 to-red-600" />
+        <div className="h-0.5 flex-1 mx-4 bg-gradient-to-r from-[#fc8019] via-[#60b246] to-[#fc8019]" />
         <div className="flex items-center gap-2 text-slate-300">
-          <Server className="w-4 h-4 text-emerald-400" />
-          <span className="font-bold text-emerald-400 uppercase">SWIGGY MCP SERVERS</span>
+          <Server className="w-4 h-4 text-[#60b246]" />
+          <span className="font-bold text-[#60b246] uppercase">SWIGGY MCP SERVERS</span>
         </div>
       </div>
 
@@ -68,20 +68,20 @@ export function TerminalMatrix({ logs, active }: TerminalMatrixProps) {
                 key={log.id}
                 onClick={() => hasJson && setSelectedLogId(isSelected ? null : log.id)}
                 className={cn(
-                  "p-3.5 bg-[#161616] border border-white/15 transition-colors cursor-pointer",
-                  isSelected ? "border-red-600 bg-[#1c1c1c]" : "hover:border-white/30"
+                  "p-3.5 bg-[#141620] border border-white/15 transition-colors cursor-pointer rounded-lg",
+                  isSelected ? "border-[#fc8019] bg-[#1d2130]" : "hover:border-white/30"
                 )}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <span className="font-black text-red-500 ff_eng">{numLabel}</span>
+                    <span className="font-black text-[#fc8019] ff_eng">{numLabel}</span>
                     <LogIcon level={log.level} />
                     <span className="font-bold text-white font-sans text-xs">{getFriendlyMessage(log)}</span>
                   </div>
 
                   <div className="flex items-center gap-2 text-[10px]">
                     {log.latency_ms && (
-                      <span className="px-1.5 py-0.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 font-bold">
+                      <span className="px-1.5 py-0.5 bg-[#60b246]/20 text-[#60b246] border border-[#60b246]/30 font-bold rounded">
                         {log.latency_ms}MS
                       </span>
                     )}
@@ -95,7 +95,7 @@ export function TerminalMatrix({ logs, active }: TerminalMatrixProps) {
                 </div>
 
                 <div className="flex items-center gap-2 mt-1.5 pl-10 text-[11px] text-slate-400">
-                  <span className="text-emerald-400 font-bold">{log.server}</span>
+                  <span className="text-[#60b246] font-bold">{log.server}</span>
                   <span className="text-slate-500 font-mono">::</span>
                   <span className="text-white">{log.tool}</span>
                 </div>
@@ -105,16 +105,16 @@ export function TerminalMatrix({ logs, active }: TerminalMatrixProps) {
                   <div className="mt-3 pt-3 border-t border-white/15 space-y-2 animate-in fade-in duration-150">
                     {log.jsonrpc_request && (
                       <div>
-                        <p className="text-[10px] font-bold uppercase text-red-500 ff_eng mb-1">JSON-RPC 2.0 REQUEST</p>
-                        <pre className="p-3 bg-[#0a0a0a] text-[10px] font-mono text-slate-300 overflow-x-auto border border-white/10">
+                        <p className="text-[10px] font-bold uppercase text-[#fc8019] ff_eng mb-1">JSON-RPC 2.0 REQUEST</p>
+                        <pre className="p-3 bg-[#12141d] text-[10px] font-mono text-slate-300 overflow-x-auto border border-white/10 rounded">
                           {JSON.stringify(log.jsonrpc_request, null, 2)}
                         </pre>
                       </div>
                     )}
                     {log.jsonrpc_response && (
                       <div>
-                        <p className="text-[10px] font-bold uppercase text-emerald-400 ff_eng mb-1">JSON-RPC 2.0 RESPONSE</p>
-                        <pre className="p-3 bg-[#0a0a0a] text-[10px] font-mono text-emerald-300/90 overflow-x-auto border border-white/10">
+                        <p className="text-[10px] font-bold uppercase text-[#60b246] ff_eng mb-1">JSON-RPC 2.0 RESPONSE</p>
+                        <pre className="p-3 bg-[#12141d] text-[10px] font-mono text-[#60b246]/90 overflow-x-auto border border-white/10 rounded">
                           {JSON.stringify(log.jsonrpc_response, null, 2)}
                         </pre>
                       </div>
@@ -133,27 +133,27 @@ export function TerminalMatrix({ logs, active }: TerminalMatrixProps) {
 function LogIcon({ level }: { level: TerminalLogLevel }) {
   if (level === "success") {
     return (
-      <div className="w-4 h-4 bg-emerald-500/20 border border-emerald-500 flex items-center justify-center shrink-0">
-        <Check className="w-2.5 h-2.5 text-emerald-400" strokeWidth={3} />
+      <div className="w-4 h-4 bg-[#60b246]/20 border border-[#60b246] flex items-center justify-center shrink-0 rounded">
+        <Check className="w-2.5 h-2.5 text-[#60b246]" strokeWidth={3} />
       </div>
     );
   }
   if (level === "calling" || level === "parsing" || level === "executing") {
     return (
-      <div className="w-4 h-4 bg-red-600/20 border border-red-600 flex items-center justify-center shrink-0">
-        <Loader2 className="w-2.5 h-2.5 text-red-500 animate-spin" />
+      <div className="w-4 h-4 bg-[#fc8019]/20 border border-[#fc8019] flex items-center justify-center shrink-0 rounded">
+        <Loader2 className="w-2.5 h-2.5 text-[#fc8019] animate-spin" />
       </div>
     );
   }
   if (level === "error") {
     return (
-      <div className="w-4 h-4 bg-red-600 text-white flex items-center justify-center shrink-0">
+      <div className="w-4 h-4 bg-[#fc8019] text-white flex items-center justify-center shrink-0 rounded">
         <ShieldAlert className="w-2.5 h-2.5" />
       </div>
     );
   }
   return (
-    <div className="w-4 h-4 border border-slate-700 flex items-center justify-center shrink-0">
+    <div className="w-4 h-4 border border-slate-700 flex items-center justify-center shrink-0 rounded">
       <Circle className="w-1.5 h-1.5 text-slate-500 fill-slate-500" />
     </div>
   );

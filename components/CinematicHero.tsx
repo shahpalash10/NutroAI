@@ -53,11 +53,11 @@ export function CinematicHero() {
 
   return (
     <section ref={containerRef} className="relative min-h-[75vh] flex flex-col justify-between py-12 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-b border-white/10">
-      {/* Background Ambient Glows */}
-      <div className="absolute top-1/4 left-10 w-96 h-96 bg-red-600/10 rounded-full blur-[120px] pointer-events-none" />
-      <div className="absolute bottom-10 right-10 w-96 h-96 bg-emerald-500/10 rounded-full blur-[120px] pointer-events-none" />
+      {/* Ambient Glows */}
+      <div className="absolute top-1/4 left-10 w-96 h-96 bg-[#fc8019]/15 rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute bottom-10 right-10 w-96 h-96 bg-[#60b246]/10 rounded-full blur-[120px] pointer-events-none" />
 
-      {/* Top Header Label (Blinking light & latency bar removed) */}
+      {/* Top Header Label */}
       <div className="flex items-center justify-between text-xs font-mono border-b border-white/10 pb-4">
         <div className="flex items-center gap-2 text-slate-300">
           <span className="ff_eng text-white font-bold">STORY 01 // CINEMATIC ORCHESTRATION</span>
@@ -68,7 +68,7 @@ export function CinematicHero() {
       <div className="my-auto py-12 space-y-6">
         <div className="overflow-hidden">
           <h1 ref={titleRef1} className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white ff_eng tracking-widest leading-none">
-            PRECISION <span className="text-red-600">NUTRITION.</span>
+            PRECISION <span className="text-[#fc8019]">NUTRITION.</span>
           </h1>
         </div>
 
@@ -86,7 +86,7 @@ export function CinematicHero() {
       {/* Bottom Scroll Prompt */}
       <div className="flex items-center justify-between pt-6 border-t border-white/10 text-xs font-mono">
         <span className="text-slate-400 ff_eng">EXPLORE PRODUCT STORY</span>
-        <div className="flex items-center gap-2 text-red-500 animate-bounce">
+        <div className="flex items-center gap-2 text-[#fc8019] animate-bounce">
           <span className="text-[10px] font-bold">SCROLL DOWN</span>
           <ArrowDown className="w-3.5 h-3.5" />
         </div>

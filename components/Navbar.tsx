@@ -21,35 +21,27 @@ export function Navbar({
     : "APPLE HEALTH";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/15 bg-[#0a0a0a]/90 backdrop-blur-md">
+    <header className="sticky top-0 z-40 border-b border-white/10 bg-[#12141d]/90 backdrop-blur-md">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
-        {/* Toyota Coniq Pro Style Logo */}
+        {/* Swiggy Themed Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 bg-red-600 flex items-center justify-center font-extrabold font-mono text-white text-sm tracking-wider">
+          <div className="w-10 h-10 bg-[#fc8019] flex items-center justify-center font-black font-mono text-white text-base tracking-wider rounded-lg shadow-lg shadow-orange-500/20">
             N/AI
           </div>
           <div>
-            <div className="flex items-center gap-2">
-              <h1 className="text-xl font-black tracking-widest text-white ff_eng">
-                NUTRO <span className="text-red-600">AI</span>
-              </h1>
-              <span className="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 bg-red-600/20 text-red-500 border border-red-600/40 ff_eng">
-                MCP ENGINE
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400 font-mono hidden sm:block tracking-wider uppercase">
-              SWIGGY MACRO COPILOT & MCP TELEMETRY
-            </p>
+            <h1 className="text-2xl font-black tracking-widest text-white ff_eng">
+              NUTRO <span className="text-[#fc8019]">AI</span>
+            </h1>
           </div>
         </div>
 
         {/* View Mode Toggle Switcher */}
-        <div className="flex items-center bg-[#141414] p-1 border border-white/15">
+        <div className="flex items-center bg-[#1b1e2b] p-1 border border-white/10 rounded-lg">
           <button
             onClick={() => onViewModeChange("desktop")}
-            className={`flex items-center gap-2 px-3 py-1.5 text-xs ff_eng transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 text-xs ff_eng transition-all rounded ${
               viewMode === "desktop"
-                ? "bg-red-600 text-white font-extrabold"
+                ? "bg-[#fc8019] text-white font-extrabold shadow-md shadow-orange-500/20"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -58,9 +50,9 @@ export function Navbar({
           </button>
           <button
             onClick={() => onViewModeChange("mobile")}
-            className={`flex items-center gap-2 px-3 py-1.5 text-xs ff_eng transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 text-xs ff_eng transition-all rounded ${
               viewMode === "mobile"
-                ? "bg-red-600 text-white font-extrabold"
+                ? "bg-[#fc8019] text-white font-extrabold shadow-md shadow-orange-500/20"
                 : "text-slate-400 hover:text-white"
             }`}
           >
@@ -69,30 +61,30 @@ export function Navbar({
           </button>
         </div>
 
-        {/* Right Action & Coniq Pro Entry Button */}
+        {/* Right Action & Swiggy Entry Button */}
         <div className="flex items-center gap-3">
           {/* Wearable Pill */}
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#141414] border border-white/15 text-xs font-mono">
-            <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#1b1e2b] border border-white/10 text-xs font-mono rounded-lg">
+            <Activity className="w-3.5 h-3.5 text-[#60b246] animate-pulse" />
             <span className="text-slate-200 uppercase font-bold">{providerLabel}</span>
           </div>
 
           {/* Goals Settings Button */}
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-2 px-3.5 py-2 bg-[#141414] hover:bg-slate-800 border border-white/15 text-xs ff_eng text-white transition-colors"
+            className="flex items-center gap-2 px-3.5 py-2 bg-[#1b1e2b] hover:bg-[#242838] border border-white/10 text-xs ff_eng text-white transition-colors rounded-lg"
           >
-            <Sliders className="w-3.5 h-3.5 text-red-500" />
+            <Sliders className="w-3.5 h-3.5 text-[#fc8019]" />
             <span className="hidden sm:inline">GOALS</span>
           </button>
 
-          {/* Coniq Pro Style ENTRY / ACTION Button */}
+          {/* Swiggy Styled ENTRY Button */}
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-2.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs ff_eng transition-all group"
+            className="flex items-center gap-2.5 px-4 py-2 bg-[#fc8019] hover:bg-[#e67316] text-white text-xs ff_eng transition-all rounded-lg shadow-lg shadow-orange-500/20 group"
           >
             <span>ENTRY</span>
-            <div className="w-5 h-5 bg-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-red-600 transition-colors">
+            <div className="w-5 h-5 bg-white/20 rounded flex items-center justify-center group-hover:bg-white group-hover:text-[#fc8019] transition-colors">
               <ArrowUpRight className="w-3.5 h-3.5" />
             </div>
           </button>

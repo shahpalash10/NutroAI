@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --color-coniq-red: #eb0a1e;
-  --color-coniq-orange: #fc8019;
-  --color-coniq-dark: #07080a;
-  --color-coniq-card: #0f1117;
-  --color-coniq-border: rgba(255, 255, 255, 0.1);
+  --color-swiggy-orange: #fc8019;
+  --color-swiggy-orange-dark: #e67316;
+  --color-swiggy-green: #60b246;
+  --color-swiggy-teal: #007e7d;
+  --color-swiggy-dark: #12141d;
+  --color-swiggy-card: #1b1e2b;
+  --color-swiggy-border: rgba(255, 255, 255, 0.1);
   --font-sans: var(--font-sans), "Inter", sans-serif;
   --font-hanken: var(--font-hanken), "Hanken Grotesk", sans-serif;
 }
@@ -18,7 +20,7 @@
   html {
     scroll-behavior: initial;
     -webkit-font-smoothing: antialiased;
-    background-color: #07080a;
+    background-color: #12141d;
   }
 
   /* Lenis recommended CSS */
@@ -43,7 +45,7 @@
   }
 
   body {
-    background-color: #07080a;
+    background-color: #12141d;
     color: #ffffff;
     font-family: var(--font-sans);
     min-height: 100vh;
@@ -51,16 +53,16 @@
   }
 
   ::-webkit-scrollbar {
-    width: 4px;
-    height: 4px;
+    width: 5px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    background: #07080a;
+    background: #12141d;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: #eb0a1e;
+    background: #fc8019;
     border-radius: 9999px;
   }
 }
@@ -72,59 +74,33 @@
   text-transform: uppercase;
 }
 
-/* Clip-Path Mask Reveals */
-.clip-reveal-hidden {
-  clip-path: polygon(0 100%, 100% 100%, 100% 100%, 0 100%);
-  transform: translateY(40px);
-  opacity: 0;
-  transition: all 1.2s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.clip-reveal-visible {
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  transform: translateY(0);
-  opacity: 1;
-}
-
-/* Image Reveal Mask */
-.img-mask-container {
-  overflow: hidden;
-  position: relative;
-}
-
-.img-mask-container img {
-  transition: transform 1.4s cubic-bezier(0.16, 1, 0.3, 1), scale 1.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.img-mask-container:hover img {
-  scale: 1.06;
-}
-
-/* Coniq Pro Masked Button */
+/* Swiggy Styled Masked Hover Button */
 .bl_maskBtn {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background: #11141c;
+  background: #1b1e2b;
   border: 1px solid rgba(255, 255, 255, 0.12);
   padding: 1.25rem 1.5rem;
   overflow: hidden;
+  border-radius: 0.75rem;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .bl_maskBtn:hover {
-  background: #eb0a1e;
-  border-color: #eb0a1e;
+  background: #fc8019;
+  border-color: #fc8019;
   color: #ffffff;
   transform: translateY(-2px);
-  box-shadow: 0 12px 30px -10px rgba(235, 10, 30, 0.4);
+  box-shadow: 0 12px 30px -10px rgba(252, 128, 25, 0.4);
 }
 
 .bl_maskBtn .arrow-box {
   width: 36px;
   height: 36px;
   background: rgba(255, 255, 255, 0.08);
+  border-radius: 0.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -133,11 +109,11 @@
 
 .bl_maskBtn:hover .arrow-box {
   background: #ffffff;
-  color: #eb0a1e;
+  color: #fc8019;
   transform: translate(3px, -3px);
 }
 
-/* Coniq Pro Section Heading */
+/* Swiggy Section Heading */
 .el_headingBlock {
   border-bottom: 1px solid rgba(255, 255, 255, 0.12);
   padding-bottom: 0.85rem;
@@ -150,7 +126,7 @@
 .el_headingBlock_num {
   font-family: var(--font-hanken);
   font-weight: 900;
-  color: #eb0a1e;
+  color: #fc8019;
   font-size: 1.5rem;
   margin-right: 0.5rem;
 }
@@ -166,20 +142,33 @@
 
 .el_headingBlock_sub {
   font-size: 0.75rem;
-  color: #888888;
+  color: #94a3b8;
   letter-spacing: 0.1em;
 }
 
-/* Cinematic Glass Card */
+/* Swiggy Card Container */
+.coniq-card {
+  background: #1b1e2b;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  transition: all 0.3s ease;
+}
+
+.coniq-card:hover {
+  border-color: rgba(252, 128, 25, 0.35);
+  box-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.5);
+}
+
 .cinematic-card {
-  background: rgba(15, 17, 23, 0.85);
+  background: rgba(27, 30, 43, 0.85);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .cinematic-card:hover {
-  border-color: rgba(235, 10, 30, 0.35);
+  border-color: rgba(252, 128, 25, 0.35);
   box-shadow: 0 20px 50px -15px rgba(0, 0, 0, 0.5);
 }
