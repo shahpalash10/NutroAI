@@ -1,144 +1,149 @@
 @import "tailwindcss";
 
 @theme {
-  --color-swiggy-orange: #fc8019;
-  --color-swiggy-orange-dark: #e67316;
-  --color-swiggy-orange-light: rgba(252, 128, 25, 0.12);
-  --color-swiggy-dark: #12141d;
-  --color-swiggy-gray: #94a3b8;
-  --color-swiggy-light-gray: #64748b;
-  --color-swiggy-border: rgba(255, 255, 255, 0.1);
-  --color-swiggy-bg: #0f172a;
-  --color-swiggy-page: #090d16;
-  --color-swiggy-green: #22c55e;
-  --color-swiggy-instamart: #0d9488;
-  --color-swiggy-rating: #10b981;
-  --font-sans: var(--font-sans), "Inter", system-ui, sans-serif;
-  --font-heading: var(--font-heading), "Outfit", sans-serif;
+  --color-coniq-red: #eb0a1e;
+  --color-coniq-orange: #fc8019;
+  --color-coniq-dark: #0a0a0a;
+  --color-coniq-card: #121212;
+  --color-coniq-border: rgba(255, 255, 255, 0.15);
+  --font-sans: var(--font-sans), "Inter", sans-serif;
+  --font-hanken: var(--font-hanken), "Hanken Grotesk", sans-serif;
 }
 
 @layer base {
   * {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.12);
   }
 
   html {
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
+    background-color: #0a0a0a;
   }
 
   body {
-    background-color: #060911;
-    color: #f8fafc;
+    background-color: #0a0a0a;
+    color: #ffffff;
     font-family: var(--font-sans);
     min-height: 100vh;
   }
 
-  h1, h2, h3, h4, h5, h6 {
-    font-family: var(--font-heading);
-  }
-
   ::-webkit-scrollbar {
-    width: 6px;
-    height: 6px;
+    width: 5px;
+    height: 5px;
   }
 
   ::-webkit-scrollbar-track {
-    background: rgba(15, 23, 42, 0.6);
+    background: #0a0a0a;
   }
 
   ::-webkit-scrollbar-thumb {
-    background: rgba(252, 128, 25, 0.3);
-    border-radius: 9999px;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background: rgba(252, 128, 25, 0.6);
+    background: #eb0a1e;
   }
 }
 
-@layer utilities {
-  .font-heading {
-    font-family: var(--font-heading);
-  }
+.ff_eng {
+  font-family: var(--font-hanken), "Hanken Grotesk", sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
 
-  .glass-card {
-    background: rgba(15, 23, 42, 0.75);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    border-radius: 1rem;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+/* Coniq Pro Infinite Scrolling Background Text Ticker */
+@keyframes marqueeScroll {
+  0% {
+    transform: translateX(0%);
   }
-
-  .glass-card-hover {
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
-
-  .glass-card-hover:hover {
-    transform: translateY(-2px);
-    border-color: rgba(252, 128, 25, 0.3);
-    box-shadow: 0 12px 40px -8px rgba(252, 128, 25, 0.25);
-  }
-
-  .glow-orange {
-    box-shadow: 0 0 25px -5px rgba(252, 128, 25, 0.4);
-  }
-
-  .glow-green {
-    box-shadow: 0 0 25px -5px rgba(34, 197, 94, 0.4);
-  }
-
-  .glow-teal {
-    box-shadow: 0 0 25px -5px rgba(13, 148, 136, 0.4);
-  }
-
-  .hide-scrollbar {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
-  }
-
-  .hide-scrollbar::-webkit-scrollbar {
-    display: none;
-  }
-
-  .text-gradient-orange {
-    background: linear-gradient(135deg, #ff9a3c 0%, #fc8019 50%, #e65100 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .text-gradient-emerald {
-    background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
-
-  .pulse-glow {
-    animation: pulseGlow 2.5s infinite ease-in-out;
+  100% {
+    transform: translateX(-50%);
   }
 }
 
-@keyframes pulseGlow {
-  0%, 100% {
-    opacity: 0.6;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 1;
-    transform: scale(1.03);
-  }
+.animate-marquee {
+  display: flex;
+  width: 200%;
+  animation: marqueeScroll 28s linear infinite;
 }
 
-@keyframes floatSlow {
-  0%, 100% {
-    transform: translateY(0px);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
+.animate-marquee:hover {
+  animation-play-state: paused;
 }
 
-.animate-float {
-  animation: floatSlow 4s ease-in-out infinite;
+/* Coniq Pro Masked Hover Button */
+.bl_maskBtn {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #141414;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 1.25rem 1.5rem;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.bl_maskBtn:hover {
+  background: #eb0a1e;
+  border-color: #eb0a1e;
+  color: #ffffff;
+}
+
+.bl_maskBtn .arrow-box {
+  width: 36px;
+  height: 36px;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.bl_maskBtn:hover .arrow-box {
+  background: #ffffff;
+  color: #eb0a1e;
+  transform: translate(2px, -2px);
+}
+
+/* Coniq Pro Section Heading */
+.el_headingBlock {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  padding-bottom: 0.75rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.el_headingBlock_num {
+  font-family: var(--font-hanken);
+  font-weight: 900;
+  color: #eb0a1e;
+  font-size: 1.25rem;
+  margin-right: 0.5rem;
+}
+
+.el_headingBlock_title {
+  font-family: var(--font-hanken);
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+.el_headingBlock_sub {
+  font-size: 0.75rem;
+  color: #888888;
+  letter-spacing: 0.08em;
+}
+
+/* Coniq Pro Card Container */
+.coniq-card {
+  background: #111111;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.coniq-card:hover {
+  border-color: rgba(235, 10, 30, 0.4);
 }

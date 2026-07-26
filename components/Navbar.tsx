@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, Sliders, Smartphone, LayoutDashboard, Activity, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, Sliders, Smartphone, LayoutDashboard, Activity } from "lucide-react";
 import type { ViewMode, FitnessProfile } from "@/lib/types";
 
 interface NavbarProps {
@@ -21,71 +21,80 @@ export function Navbar({
     : "APPLE HEALTH";
 
   return (
-    <header className="sticky top-0 z-40 border-b border-white/10 bg-slate-950/80 backdrop-blur-xl">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
-        {/* Brand */}
+    <header className="sticky top-0 z-40 border-b border-white/15 bg-[#0a0a0a]/90 backdrop-blur-md">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+        {/* Toyota Coniq Pro Style Logo */}
         <div className="flex items-center gap-3">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-orange-600 via-orange-500 to-amber-400 flex items-center justify-center shadow-lg shadow-orange-500/25 ring-1 ring-white/20">
-            <Sparkles className="w-5 h-5 text-white" />
+          <div className="w-10 h-10 bg-red-600 flex items-center justify-center font-extrabold font-mono text-white text-sm tracking-wider">
+            N/AI
           </div>
           <div>
             <div className="flex items-center gap-2">
-              <h1 className="text-lg font-black tracking-tight text-white font-heading">
-                Nutro<span className="text-gradient-orange">AI</span>
+              <h1 className="text-xl font-black tracking-widest text-white ff_eng">
+                NUTRO <span className="text-red-600">AI</span>
               </h1>
-              <span className="text-[10px] font-semibold uppercase tracking-wider px-2 py-0.5 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">
-                MCP v2.0
+              <span className="text-[10px] font-extrabold uppercase tracking-widest px-2 py-0.5 bg-red-600/20 text-red-500 border border-red-600/40 ff_eng">
+                MCP ENGINE
               </span>
             </div>
-            <p className="text-xs text-slate-400 hidden sm:block">
-              Swiggy Macro Copilot & MCP Engine
+            <p className="text-[11px] text-slate-400 font-mono hidden sm:block tracking-wider uppercase">
+              SWIGGY MACRO COPILOT & MCP TELEMETRY
             </p>
           </div>
         </div>
 
-        {/* Center Controls: View Switcher */}
-        <div className="flex items-center bg-slate-900/90 p-1 rounded-xl border border-white/10">
+        {/* View Mode Toggle Switcher */}
+        <div className="flex items-center bg-[#141414] p-1 border border-white/15">
           <button
             onClick={() => onViewModeChange("desktop")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 text-xs ff_eng transition-all ${
               viewMode === "desktop"
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md shadow-orange-500/20"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-red-600 text-white font-extrabold"
+                : "text-slate-400 hover:text-white"
             }`}
           >
             <LayoutDashboard className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Desktop View</span>
+            <span className="hidden sm:inline">DESKTOP DASHBOARD</span>
           </button>
           <button
             onClick={() => onViewModeChange("mobile")}
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+            className={`flex items-center gap-2 px-3 py-1.5 text-xs ff_eng transition-all ${
               viewMode === "mobile"
-                ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-md shadow-orange-500/20"
-                : "text-slate-400 hover:text-slate-200"
+                ? "bg-red-600 text-white font-extrabold"
+                : "text-slate-400 hover:text-white"
             }`}
           >
             <Smartphone className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Swiggy Mobile App</span>
+            <span className="hidden sm:inline">SWIGGY MOBILE APP</span>
           </button>
         </div>
 
-        {/* Right Status & Controls */}
+        {/* Right Action & Coniq Pro Entry Button */}
         <div className="flex items-center gap-3">
-          {/* Wearable Status Pill */}
-          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/80 border border-emerald-500/30 text-xs">
+          {/* Wearable Pill */}
+          <div className="hidden md:flex items-center gap-2 px-3 py-1.5 bg-[#141414] border border-white/15 text-xs font-mono">
             <Activity className="w-3.5 h-3.5 text-emerald-400 animate-pulse" />
-            <span className="text-slate-300 font-medium">{providerLabel}</span>
-            <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-slate-200 uppercase font-bold">{providerLabel}</span>
           </div>
 
           {/* Goals Settings Button */}
           <button
             onClick={onOpenSettings}
-            className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900 hover:bg-slate-800 border border-white/10 text-xs font-semibold text-slate-200 hover:text-white transition-all shadow-sm"
-            title="Configure Macro Goals"
+            className="flex items-center gap-2 px-3.5 py-2 bg-[#141414] hover:bg-slate-800 border border-white/15 text-xs ff_eng text-white transition-colors"
           >
-            <Sliders className="w-3.5 h-3.5 text-orange-400" />
-            <span className="hidden sm:inline">Edit Goals</span>
+            <Sliders className="w-3.5 h-3.5 text-red-500" />
+            <span className="hidden sm:inline">GOALS</span>
+          </button>
+
+          {/* Coniq Pro Style ENTRY / ACTION Button */}
+          <button
+            onClick={onOpenSettings}
+            className="flex items-center gap-2.5 px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs ff_eng transition-all group"
+          >
+            <span>ENTRY</span>
+            <div className="w-5 h-5 bg-white/20 flex items-center justify-center group-hover:bg-white group-hover:text-red-600 transition-colors">
+              <ArrowUpRight className="w-3.5 h-3.5" />
+            </div>
           </button>
         </div>
       </div>

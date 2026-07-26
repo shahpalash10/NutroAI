@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Activity, Flame, Dumbbell, RefreshCw, SlidersHorizontal, Zap } from "lucide-react";
+import { Flame, Dumbbell, RefreshCw, Zap } from "lucide-react";
 import { macroPercent } from "@/lib/utils";
 import type { FitnessProfile } from "@/lib/types";
 
@@ -35,9 +35,9 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
 
   if (loading) {
     return (
-      <div className="glass-card p-5 animate-pulse space-y-4">
-        <div className="h-5 bg-slate-800 rounded w-1/3" />
-        <div className="h-32 bg-slate-800/50 rounded-xl" />
+      <div className="coniq-card p-6 animate-pulse space-y-4">
+        <div className="h-6 bg-slate-800 rounded w-1/3" />
+        <div className="h-32 bg-slate-800/50 rounded" />
       </div>
     );
   }
@@ -46,194 +46,168 @@ export function WearableStatsCard({ profile, loading, onOpenSettings }: Wearable
   const wearableLabel = profile?.wearable_provider ? profile.wearable_provider.replace("_", " ").toUpperCase() : "APPLE HEALTH";
 
   return (
-    <div className="glass-card overflow-hidden border border-white/10 relative group">
-      {/* Background Ambient Glow */}
-      <div className="absolute -top-24 -right-24 w-60 h-60 bg-orange-500/15 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute -bottom-24 -left-24 w-60 h-60 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none" />
-
-      {/* Card Header */}
-      <div className="px-5 py-4 border-b border-white/10 flex items-center justify-between bg-slate-900/60">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
-            <Activity className="w-5 h-5" />
-          </div>
-          <div>
-            <div className="flex items-center gap-2">
-              <h2 className="text-sm font-bold text-white font-heading">Wearable Macro Telemetry</h2>
-              <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
-                {goalLabel}
-              </span>
-            </div>
-            <p className="text-[11px] text-slate-400 flex items-center gap-1.5 mt-0.5">
-              <span>Synced from {wearableLabel}</span>
-              <button
-                onClick={handleSyncRefresh}
-                className="text-orange-400 hover:text-orange-300 transition-colors"
-                title="Refresh Wearable Data"
-              >
-                <RefreshCw className={`w-3 h-3 ${syncing ? "animate-spin" : ""}`} />
-              </button>
-            </p>
-          </div>
+    <div className="coniq-card p-6 border border-white/15">
+      {/* Toyota Coniq Pro Section Heading */}
+      <div className="el_headingBlock">
+        <div className="flex items-baseline gap-2">
+          <span className="el_headingBlock_num">01-</span>
+          <h2 className="el_headingBlock_title">OUR BUSINESS & TELEMETRY</h2>
         </div>
-
-        {onOpenSettings && (
-          <button
-            onClick={onOpenSettings}
-            className="p-2 rounded-xl bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white border border-white/10 transition-all text-xs flex items-center gap-1.5"
-          >
-            <SlidersHorizontal className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Goals</span>
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          <span className="el_headingBlock_sub uppercase hidden sm:inline">リアルタイムマクロ統合 // WEARABLE SYNC</span>
+          <span className="px-2 py-0.5 bg-red-600/20 text-red-500 border border-red-600/40 text-xs font-mono font-bold">
+            {goalLabel}
+          </span>
+        </div>
       </div>
 
-      {/* Main Rings + Macro Metrics Grid */}
-      <div className="p-5 grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
-        {/* Left: Concentric Progress Rings */}
-        <div className="md:col-span-5 flex flex-col items-center justify-center">
-          <div className="relative w-36 h-36 flex items-center justify-center">
+      {/* Main Metric Section */}
+      <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center pt-2">
+        {/* Left: Concentric Progress Rings with Hanken Grotesk Numbers */}
+        <div className="md:col-span-5 flex flex-col items-center justify-center border-b md:border-b-0 md:border-r border-white/15 pb-6 md:pb-0 md:pr-6">
+          <div className="relative w-40 h-40 flex items-center justify-center">
             <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
               {/* Outer Ring: Calories */}
-              <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.06)" strokeWidth="8" fill="none" />
+              <circle cx="50" cy="50" r="42" stroke="rgba(255,255,255,0.08)" strokeWidth="7" fill="none" />
               <circle
                 cx="50"
                 cy="50"
                 r="42"
-                stroke="#fc8019"
-                strokeWidth="8"
+                stroke="#eb0a1e"
+                strokeWidth="7"
                 fill="none"
                 strokeDasharray="263.89"
                 strokeDashoffset={263.89 - (263.89 * caloriesPct) / 100}
-                strokeLinecap="round"
+                strokeLinecap="square"
                 className="transition-all duration-1000 ease-out"
               />
 
               {/* Middle Ring: Protein */}
-              <circle cx="50" cy="50" r="31" stroke="rgba(255,255,255,0.06)" strokeWidth="7" fill="none" />
+              <circle cx="50" cy="50" r="31" stroke="rgba(255,255,255,0.08)" strokeWidth="6" fill="none" />
               <circle
                 cx="50"
                 cy="50"
                 r="31"
-                stroke="#22c55e"
-                strokeWidth="7"
+                stroke="#10b981"
+                strokeWidth="6"
                 fill="none"
                 strokeDasharray="194.78"
                 strokeDashoffset={194.78 - (194.78 * proteinPct) / 100}
-                strokeLinecap="round"
+                strokeLinecap="square"
                 className="transition-all duration-1000 ease-out"
               />
 
               {/* Inner Ring: Carbs */}
-              <circle cx="50" cy="50" r="21" stroke="rgba(255,255,255,0.06)" strokeWidth="6" fill="none" />
+              <circle cx="50" cy="50" r="21" stroke="rgba(255,255,255,0.08)" strokeWidth="5" fill="none" />
               <circle
                 cx="50"
                 cy="50"
                 r="21"
                 stroke="#fbbf24"
-                strokeWidth="6"
+                strokeWidth="5"
                 fill="none"
                 strokeDasharray="131.95"
                 strokeDashoffset={131.95 - (131.95 * carbsPct) / 100}
-                strokeLinecap="round"
+                strokeLinecap="square"
                 className="transition-all duration-1000 ease-out"
               />
             </svg>
 
-            {/* Inner Ring Text */}
+            {/* Ring Center Text */}
             <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-              <span className="text-xl font-black text-white font-heading leading-none">
-                {Math.round(remaining.protein)}g
+              <span className="text-2xl font-black text-white ff_eng leading-none">
+                {Math.round(remaining.protein)}G
               </span>
-              <span className="text-[10px] font-semibold text-emerald-400 uppercase tracking-wider mt-0.5">
-                Protein Left
+              <span className="text-[10px] font-bold text-emerald-400 ff_eng tracking-widest mt-1">
+                PROTEIN LEFT
               </span>
             </div>
           </div>
-          <p className="text-xs text-slate-400 mt-2 font-medium">
-            <span className="text-orange-400 font-bold">{Math.round(remaining.calories)} kcal</span> left to hit target
-          </p>
+
+          <div className="mt-3 text-center">
+            <p className="text-xs text-slate-300 font-mono">
+              <span className="text-red-500 font-bold">{Math.round(remaining.calories)} KCAL</span> REMAINING TODAY
+            </p>
+            <p className="text-[11px] text-slate-500 font-mono mt-0.5 flex items-center justify-center gap-1">
+              <span>SYNCED FROM {wearableLabel}</span>
+              <button onClick={handleSyncRefresh} className="hover:text-white transition-colors" title="Sync">
+                <RefreshCw className={`w-3 h-3 text-red-500 ${syncing ? "animate-spin" : ""}`} />
+              </button>
+            </p>
+          </div>
         </div>
 
-        {/* Right: Macro Progress Bars Grid */}
-        <div className="md:col-span-7 space-y-3.5">
-          {/* Calories */}
+        {/* Right: Editorial Macro Metric Progress Bars */}
+        <div className="md:col-span-7 space-y-4">
+          {/* Calories Row */}
           <div className="space-y-1">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-slate-200 flex items-center gap-1.5">
-                <Flame className="w-3.5 h-3.5 text-orange-400" /> Calories
+            <div className="flex justify-between text-xs font-mono">
+              <span className="font-bold text-white uppercase flex items-center gap-1.5 ff_eng">
+                <Flame className="w-3.5 h-3.5 text-red-500" /> CALORIES BUDGET
               </span>
-              <span className="text-slate-400 font-mono">
-                {Math.round(consumed.calories)} / <span className="text-white font-bold">{Math.round(targets.calories)}</span> kcal
-                <span className="text-orange-400 ml-2 font-bold">({Math.round(remaining.calories)} left)</span>
+              <span className="text-slate-300">
+                {Math.round(consumed.calories)} / <strong className="text-white">{Math.round(targets.calories)}</strong> KCAL
+                <span className="text-red-500 ml-2 font-bold">({Math.round(remaining.calories)} REMAINING)</span>
               </span>
             </div>
-            <div className="h-2 bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-white/5">
-              <div
-                className="h-full bg-gradient-to-r from-orange-600 to-orange-400 rounded-full transition-all duration-700 shadow-sm"
-                style={{ width: `${caloriesPct}%` }}
-              />
+            <div className="h-2 bg-[#1a1a1a] rounded-none border border-white/10 p-0.5">
+              <div className="h-full bg-red-600 transition-all duration-700" style={{ width: `${caloriesPct}%` }} />
             </div>
           </div>
 
-          {/* Protein */}
+          {/* Protein Row */}
           <div className="space-y-1">
-            <div className="flex items-center justify-between text-xs">
-              <span className="font-bold text-slate-200 flex items-center gap-1.5">
-                <Zap className="w-3.5 h-3.5 text-emerald-400" /> Protein
+            <div className="flex justify-between text-xs font-mono">
+              <span className="font-bold text-white uppercase flex items-center gap-1.5 ff_eng">
+                <Zap className="w-3.5 h-3.5 text-emerald-400" /> PROTEIN TARGET
               </span>
-              <span className="text-slate-400 font-mono">
-                {Math.round(consumed.protein)} / <span className="text-white font-bold">{Math.round(targets.protein)}</span> g
-                <span className="text-emerald-400 ml-2 font-bold">({Math.round(remaining.protein)}g left)</span>
+              <span className="text-slate-300">
+                {Math.round(consumed.protein)} / <strong className="text-white">{Math.round(targets.protein)}</strong> G
+                <span className="text-emerald-400 ml-2 font-bold">({Math.round(remaining.protein)}G REMAINING)</span>
               </span>
             </div>
-            <div className="h-2 bg-slate-800/80 rounded-full overflow-hidden p-0.5 border border-white/5">
-              <div
-                className="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 rounded-full transition-all duration-700 shadow-sm"
-                style={{ width: `${proteinPct}%` }}
-              />
+            <div className="h-2 bg-[#1a1a1a] rounded-none border border-white/10 p-0.5">
+              <div className="h-full bg-emerald-500 transition-all duration-700" style={{ width: `${proteinPct}%` }} />
             </div>
           </div>
 
           {/* Carbs & Fats Dual Grid */}
-          <div className="grid grid-cols-2 gap-3 pt-1">
-            {/* Carbs */}
+          <div className="grid grid-cols-2 gap-4 pt-1 font-mono text-xs">
             <div className="space-y-1">
               <div className="flex justify-between text-[11px]">
-                <span className="font-bold text-slate-300">Carbs</span>
-                <span className="text-amber-400 font-semibold">{Math.round(remaining.carbs)}g left</span>
+                <span className="font-bold text-white uppercase ff_eng">CARBS</span>
+                <span className="text-amber-400">{Math.round(remaining.carbs)}g left</span>
               </div>
-              <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-amber-400 rounded-full transition-all duration-700" style={{ width: `${carbsPct}%` }} />
+              <div className="h-1.5 bg-[#1a1a1a] border border-white/10">
+                <div className="h-full bg-amber-400 transition-all duration-700" style={{ width: `${carbsPct}%` }} />
               </div>
             </div>
 
-            {/* Fats */}
             <div className="space-y-1">
               <div className="flex justify-between text-[11px]">
-                <span className="font-bold text-slate-300">Fats</span>
-                <span className="text-rose-400 font-semibold">{Math.round(remaining.fats)}g left</span>
+                <span className="font-bold text-white uppercase ff_eng">FATS</span>
+                <span className="text-rose-400">{Math.round(remaining.fats)}g left</span>
               </div>
-              <div className="h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                <div className="h-full bg-rose-400 rounded-full transition-all duration-700" style={{ width: `${fatsPct}%` }} />
+              <div className="h-1.5 bg-[#1a1a1a] border border-white/10">
+                <div className="h-full bg-rose-400 transition-all duration-700" style={{ width: `${fatsPct}%` }} />
               </div>
             </div>
           </div>
+
+          {/* Footer Callout */}
+          {profile?.last_workout && (
+            <div className="pt-2 flex items-center justify-between text-xs font-mono border-t border-white/10">
+              <div className="flex items-center gap-2 text-slate-300">
+                <Dumbbell className="w-4 h-4 text-red-500" />
+                <span>{profile.last_workout}</span>
+              </div>
+              <span className="text-emerald-400 font-bold ff_eng">
+                STREAK // {profile.streak_days ?? 14} DAYS 🔥
+              </span>
+            </div>
+          )}
         </div>
       </div>
-
-      {/* Workout Context Footer */}
-      {profile?.last_workout && (
-        <div className="px-5 py-2.5 bg-slate-900/80 border-t border-white/10 flex items-center justify-between text-xs">
-          <div className="flex items-center gap-2">
-            <Dumbbell className="w-4 h-4 text-orange-400" />
-            <span className="text-slate-300 font-medium">{profile.last_workout}</span>
-          </div>
-          <span className="text-[11px] font-semibold text-emerald-400 px-2 py-0.5 rounded-full bg-emerald-500/10 border border-emerald-500/20">
-            {profile.streak_days ?? 14} Day Streak 🔥
-          </span>
-        </div>
-      )}
     </div>
   );
 }

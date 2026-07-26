@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Outfit } from "next/font/google";
+import { Inter, Hanken_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const inter = Inter({
@@ -8,16 +8,17 @@ const inter = Inter({
   display: "swap",
 });
 
-const outfit = Outfit({
+const hanken = Hanken_Grotesk({
   subsets: ["latin"],
-  variable: "--font-heading",
+  variable: "--font-hanken",
+  weight: ["400", "600", "700", "800", "900"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Nutro AI — Swiggy Macro Copilot & MCP Orchestration Engine",
-  description: "AI-powered wearable macro tracking and real-time Swiggy Food & Instamart MCP meal ordering copilot.",
-  keywords: ["Nutro AI", "Swiggy", "Macros", "Fitness", "Meal Planning", "MCP", "AI Copilot", "Instamart"],
+  title: "NUTRO AI — Swiggy Macro Copilot & MCP Engine",
+  description: "High-contrast editorial macro tracking and real-time Swiggy Food & Instamart MCP meal ordering copilot.",
+  keywords: ["Nutro AI", "Toyota Coniq Pro", "Swiggy", "Macros", "Fitness", "MCP", "AI Copilot"],
 };
 
 export default function RootLayout({
@@ -27,10 +28,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark scroll-smooth">
-      <body className={`${inter.variable} ${outfit.variable} font-sans antialiased bg-slate-950 text-slate-100 min-h-screen selection:bg-orange-500/30 selection:text-orange-300`}>
+      <body className={`${inter.variable} ${hanken.variable} font-sans antialiased bg-[#0a0a0a] text-white min-h-screen selection:bg-red-600 selection:text-white`}>
         {children}
       </body>
     </html>
   );
 }
-

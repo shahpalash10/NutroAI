@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useEffect, useState } from "react";
-import { Send, Sparkles, Mic, Trash2, Bot, User } from "lucide-react";
+import { Send, Sparkles, Mic, Trash2, Bot, User, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -20,10 +20,10 @@ interface CopilotChatProps {
 }
 
 const CATEGORY_PROMPTS = [
-  { icon: "🍗", text: "Post-Leg Day 50g Protein Dinner" },
-  { icon: "🛒", text: "Stock up Instamart with Greek Yogurt & Egg Whites" },
-  { icon: "🥑", text: "Keto Lunch under 500 kcal" },
-  { icon: "🍨", text: "Late night high-protein guilt-free snack" },
+  { label: "POST-WORKOUT MEAL", desc: "Post-Leg Day 50g Protein Dinner", icon: "🍗" },
+  { label: "INSTAMART PREP", desc: "Greek Yogurt & Egg Whites Stock Up", icon: "🛒" },
+  { label: "KETO LUNCH", desc: "Keto Bowl Under 500 kcal", icon: "🥑" },
+  { label: "LATE NIGHT SNACK", desc: "High-Protein Dessert Option", icon: "🍨" },
 ];
 
 export function CopilotChat({
@@ -64,71 +64,70 @@ export function CopilotChat({
   };
 
   return (
-    <div className="glass-card overflow-hidden flex flex-col border border-white/10 h-[480px] shadow-2xl relative">
-      {/* Chat Header */}
-      <div className="px-5 py-3.5 border-b border-white/10 flex items-center justify-between bg-slate-900/70">
-        <div className="flex items-center gap-3">
-          <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-orange-500 to-amber-400 flex items-center justify-center text-white shadow-lg shadow-orange-500/20">
-            <Sparkles className="w-5 h-5" />
-          </div>
-          <div>
-            <h2 className="text-sm font-bold text-white font-heading flex items-center gap-2">
-              Nutro AI Copilot
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping" />
-            </h2>
-            <p className="text-[11px] text-slate-400">Ask for meals or groceries matching your exact macro budget</p>
-          </div>
+    <div className="coniq-card p-6 border border-white/15 flex flex-col h-[520px]">
+      {/* Toyota Coniq Pro Section Heading */}
+      <div className="el_headingBlock">
+        <div className="flex items-baseline gap-2">
+          <span className="el_headingBlock_num">02-</span>
+          <h2 className="el_headingBlock_title">INTERVIEW & COPILOT CHAT</h2>
         </div>
-
-        {messages.length > 0 && onClearChat && (
-          <button
-            type="button"
-            onClick={onClearChat}
-            className="p-2 rounded-lg text-slate-400 hover:text-rose-400 hover:bg-rose-500/10 transition-colors"
-            title="Clear Chat History"
-          >
-            <Trash2 className="w-4 h-4" />
-          </button>
-        )}
+        <div className="flex items-center gap-3">
+          <span className="el_headingBlock_sub uppercase hidden sm:inline">AI対談アシスタント // AI COPILOT</span>
+          {messages.length > 0 && onClearChat && (
+            <button
+              type="button"
+              onClick={onClearChat}
+              className="text-slate-400 hover:text-red-500 transition-colors"
+              title="Clear History"
+            >
+              <Trash2 className="w-4 h-4" />
+            </button>
+          )}
+        </div>
       </div>
 
-      {/* Messages Scroll Area */}
-      <div ref={scrollRef} className="flex-1 overflow-y-auto px-5 py-4 space-y-4">
+      {/* Messages Stream Area */}
+      <div ref={scrollRef} className="flex-1 overflow-y-auto pr-2 space-y-4 font-mono text-xs">
         {messages.length === 0 && (
           <div className="space-y-4 py-2">
-            {/* Welcome Greeting */}
             <div className="flex gap-3">
-              <div className="w-8 h-8 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center shrink-0">
-                <Bot className="w-4 h-4 text-orange-400" />
+              <div className="w-8 h-8 bg-red-600 flex items-center justify-center text-white font-bold shrink-0">
+                AI
               </div>
-              <div className="bg-slate-800/60 border border-white/10 rounded-2xl rounded-tl-sm p-4 max-w-[85%] text-xs text-slate-200 leading-relaxed shadow-sm">
-                <p className="font-semibold text-white mb-1 font-heading text-sm">
-                  Welcome back, Palash! 👋
+              <div className="bg-[#181818] border border-white/15 p-4 max-w-[85%] leading-relaxed text-slate-200">
+                <p className="font-bold text-white mb-1 ff_eng text-sm">
+                  WELCOME // NUTRO COPILOT ENGAGED
                 </p>
                 <p>
-                  I&apos;ve synced your <strong>Apple Health</strong> macro budget. You have{" "}
-                  <span className="text-emerald-400 font-bold">42g protein</span> and{" "}
-                  <span className="text-orange-400 font-bold">720 kcal</span> left today.
+                  Synced wearable budget: <span className="text-emerald-400 font-bold">42g Protein</span> &{" "}
+                  <span className="text-red-500 font-bold">720 kcal</span> left today.
                 </p>
-                <p className="mt-2 text-slate-400">
-                  Tell me what you want to eat or stock up on, and I&apos;ll query Swiggy Food or Instamart MCP servers for you!
+                <p className="mt-2 text-slate-400 text-[11px]">
+                  State your meal or grocery query to query Swiggy Food & Instamart MCP servers.
                 </p>
               </div>
             </div>
 
-            {/* Quick Action Chips */}
+            {/* Toyota Coniq Pro Style Masked Prompt Cards */}
             <div className="pl-11 space-y-2">
-              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Recommended Prompts</p>
+              <p className="text-[10px] font-bold uppercase tracking-widest text-slate-500 ff_eng">
+                RECOMMENDED ACTION PROMPTS
+              </p>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {CATEGORY_PROMPTS.map((p) => (
                   <button
-                    key={p.text}
+                    key={p.label}
                     type="button"
-                    onClick={() => handleSuggestion(p.text)}
-                    className="text-left text-xs text-slate-300 hover:text-white bg-slate-800/40 hover:bg-orange-500/15 border border-white/5 hover:border-orange-500/40 rounded-xl p-2.5 transition-all flex items-start gap-2 group"
+                    onClick={() => handleSuggestion(p.desc)}
+                    className="bl_maskBtn text-left group"
                   >
-                    <span className="text-sm">{p.icon}</span>
-                    <span className="line-clamp-2 leading-snug group-hover:text-orange-300">{p.text}</span>
+                    <div>
+                      <span className="text-[10px] text-red-500 font-bold ff_eng block">{p.label}</span>
+                      <span className="text-xs text-white font-sans font-medium line-clamp-1">{p.desc}</span>
+                    </div>
+                    <div className="arrow-box">
+                      <ArrowUpRight className="w-4 h-4 text-white" />
+                    </div>
                   </button>
                 ))}
               </div>
@@ -136,7 +135,7 @@ export function CopilotChat({
           </div>
         )}
 
-        {/* Message Bubbles */}
+        {/* Message Items */}
         {messages.map((msg) => {
           const isUser = msg.role === "user";
           return (
@@ -146,10 +145,8 @@ export function CopilotChat({
             >
               <div
                 className={cn(
-                  "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 text-xs font-bold shadow-md",
-                  isUser
-                    ? "bg-slate-800 text-slate-200 border border-white/10"
-                    : "bg-orange-500/20 text-orange-400 border border-orange-500/30"
+                  "w-8 h-8 flex items-center justify-center font-bold text-xs shrink-0 border border-white/15",
+                  isUser ? "bg-[#222222] text-white" : "bg-red-600 text-white"
                 )}
               >
                 {isUser ? <User className="w-4 h-4" /> : <Bot className="w-4 h-4" />}
@@ -157,10 +154,10 @@ export function CopilotChat({
 
               <div
                 className={cn(
-                  "rounded-2xl px-4 py-3 text-xs leading-relaxed max-w-[85%] shadow-sm",
+                  "p-3.5 text-xs leading-relaxed max-w-[85%]",
                   isUser
-                    ? "bg-gradient-to-r from-orange-500 to-orange-600 text-white rounded-tr-sm"
-                    : "bg-slate-800/80 border border-white/10 text-slate-200 rounded-tl-sm"
+                    ? "bg-red-600 text-white font-sans"
+                    : "bg-[#161616] border border-white/15 text-slate-200 font-sans"
                 )}
               >
                 <div className="whitespace-pre-wrap space-y-1">
@@ -168,7 +165,7 @@ export function CopilotChat({
                     if (line.startsWith("• ")) {
                       return (
                         <div key={idx} className="flex items-start gap-1.5 pl-1">
-                          <span className="text-orange-400 font-bold">•</span>
+                          <span className="text-red-500 font-bold">•</span>
                           <span>{parseBold(line.slice(2))}</span>
                         </div>
                       );
@@ -181,33 +178,27 @@ export function CopilotChat({
           );
         })}
 
-        {/* Loading Indicator */}
         {isLoading && (
           <div className="flex gap-3">
-            <div className="w-8 h-8 rounded-xl bg-orange-500/20 border border-orange-500/30 flex items-center justify-center shrink-0">
-              <Bot className="w-4 h-4 text-orange-400 animate-spin" />
+            <div className="w-8 h-8 bg-red-600 flex items-center justify-center text-white shrink-0">
+              <Sparkles className="w-4 h-4 animate-spin" />
             </div>
-            <div className="bg-slate-800/80 border border-white/10 rounded-2xl rounded-tl-sm px-4 py-3 flex items-center gap-2">
-              <span className="text-xs text-orange-400 font-medium">Orchestrating MCP tools</span>
-              <div className="flex items-center gap-1">
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce [animation-delay:0ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce [animation-delay:150ms]" />
-                <span className="w-1.5 h-1.5 rounded-full bg-orange-400 animate-bounce [animation-delay:300ms]" />
-              </div>
+            <div className="bg-[#161616] border border-white/15 p-3 flex items-center gap-2 text-xs text-red-500 font-mono">
+              <span className="ff_eng">EXECUTING MCP TOOL DISPATCH...</span>
             </div>
           </div>
         )}
       </div>
 
-      {/* Input Box */}
-      <form onSubmit={onSubmit} className="p-3 border-t border-white/10 bg-slate-900/80">
+      {/* Input Field Bar */}
+      <form onSubmit={onSubmit} className="pt-3 border-t border-white/15">
         {isRecording && (
-          <div className="mb-2 px-3 py-1.5 rounded-lg bg-rose-500/10 border border-rose-500/30 text-rose-400 text-xs flex items-center gap-2 animate-pulse">
+          <div className="mb-2 p-2 bg-red-600/20 border border-red-600 text-red-400 text-xs font-mono flex items-center gap-2 animate-pulse">
             <Mic className="w-3.5 h-3.5" />
-            <span>Listening... Speak your meal query</span>
+            <span className="ff_eng">LISTENING... SPEAK YOUR QUERY</span>
           </div>
         )}
-        <div className="flex items-end gap-2 bg-slate-950/80 border border-white/10 rounded-xl px-3 py-2 focus-within:border-orange-500/50 transition-all">
+        <div className="flex items-center gap-2 bg-[#141414] border border-white/15 p-2 focus-within:border-red-600 transition-colors">
           <textarea
             ref={inputRef}
             value={input}
@@ -218,20 +209,17 @@ export function CopilotChat({
                 onSubmit(e);
               }
             }}
-            placeholder="E.g., High-protein dinner after leg day or Instamart groceries..."
+            placeholder="Search meals or groceries matching remaining macros..."
             rows={1}
             disabled={isLoading}
-            className="flex-1 bg-transparent text-xs text-white placeholder:text-slate-500 resize-none outline-none py-1.5 max-h-20"
+            className="flex-1 bg-transparent text-xs text-white placeholder:text-slate-500 resize-none outline-none py-1.5 max-h-20 font-sans"
           />
 
           <button
             type="button"
             onClick={toggleVoiceRecording}
-            className={cn(
-              "p-2 rounded-lg transition-colors shrink-0 text-slate-400 hover:text-white",
-              isRecording && "text-rose-400 bg-rose-500/20"
-            )}
-            title="Simulate Voice Command"
+            className={cn("p-2 text-slate-400 hover:text-white transition-colors", isRecording && "text-red-500")}
+            title="Voice Input"
           >
             <Mic className="w-4 h-4" />
           </button>
@@ -239,8 +227,9 @@ export function CopilotChat({
           <button
             type="submit"
             disabled={isLoading || !input.trim()}
-            className="w-8 h-8 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 flex items-center justify-center disabled:opacity-40 shrink-0 text-white shadow-md shadow-orange-500/20 hover:from-orange-600 hover:to-orange-700 transition-all"
+            className="px-4 py-2 bg-red-600 hover:bg-red-700 disabled:opacity-40 text-white font-extrabold ff_eng text-xs flex items-center gap-1.5 transition-colors"
           >
+            <span>SEND</span>
             <Send className="w-3.5 h-3.5" />
           </button>
         </div>
@@ -256,7 +245,7 @@ function parseBold(text: string) {
       return <strong key={i} className="font-bold text-white">{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith("*") && part.endsWith("*")) {
-      return <em key={i} className="italic text-orange-300">{part.slice(1, -1)}</em>;
+      return <em key={i} className="italic text-red-400">{part.slice(1, -1)}</em>;
     }
     return part;
   });

@@ -97,7 +97,15 @@ export default function DashboardPage() {
   );
 
   return (
-    <div className="min-h-screen bg-[#060911] text-slate-100 flex flex-col font-sans">
+    <div className="min-h-screen bg-[#0a0a0a] text-white flex flex-col font-sans relative overflow-x-hidden">
+      {/* Toyota Coniq Pro Infinite Background Text Marquee */}
+      <div className="fixed inset-x-0 top-24 pointer-events-none opacity-5 z-0 select-none overflow-hidden">
+        <div className="animate-marquee whitespace-nowrap text-[120px] font-black ff_eng tracking-widest text-white">
+          <span>NUTRO AI — SWIGGY MACRO COPILOT & MCP ENGINE // WEARABLE TELEMETRY // </span>
+          <span>NUTRO AI — SWIGGY MACRO COPILOT & MCP ENGINE // WEARABLE TELEMETRY // </span>
+        </div>
+      </div>
+
       {/* Top Navbar */}
       <Navbar
         viewMode={viewMode}
@@ -106,20 +114,20 @@ export default function DashboardPage() {
         profile={profile}
       />
 
-      {/* Main Layout Area */}
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6">
+      {/* Main Content Area */}
+      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 relative z-10 space-y-8">
         {viewMode === "desktop" ? (
           /* DESKTOP DASHBOARD MODE */
-          <div className="space-y-6 animate-in fade-in duration-300">
-            {/* Top Row: Full Wearable Telemetry & Radial Progress Rings */}
+          <div className="space-y-8 animate-in fade-in duration-300">
+            {/* 01- OUR BUSINESS & TELEMETRY */}
             <WearableStatsCard
               profile={profile}
               loading={profileLoading}
               onOpenSettings={() => setIsSettingsOpen(true)}
             />
 
-            {/* Middle Row: Copilot Chat & Swiggy Cart Engine Side-by-Side */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+            {/* 02- COPILOT CHAT & 03- SWIGGY CART */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               <div className="lg:col-span-7">
                 <CopilotChat
                   messages={chatMessages}
@@ -140,24 +148,20 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            {/* Bottom Row: MCP Debug & Protocol Network Matrix */}
+            {/* 04- SPECIAL MCP DEBUG MATRIX */}
             <TerminalMatrix logs={logs} active={isLoading} />
           </div>
         ) : (
           /* SWIGGY MOBILE APP VIEW MODE */
           <div className="flex justify-center py-4 animate-in fade-in zoom-in-95 duration-300">
-            <div className="w-full max-w-md bg-slate-950 border border-white/10 rounded-[2.5rem] p-4 shadow-2xl space-y-4 ring-1 ring-white/10">
-              {/* Mobile Notch & Status Bar Simulation */}
-              <div className="flex items-center justify-between px-4 pt-1 pb-2 border-b border-white/10 text-xs text-slate-400">
-                <span className="font-semibold text-white">9:41</span>
-                <div className="w-16 h-4 bg-slate-900 rounded-full border border-white/10 mx-auto" />
-                <div className="flex items-center gap-1.5 font-mono text-[10px]">
-                  <span>5G</span>
-                  <span>100%</span>
-                </div>
+            <div className="w-full max-w-md bg-[#111111] border border-white/20 rounded-[2.5rem] p-4 shadow-2xl space-y-4 ring-1 ring-white/10">
+              {/* Mobile Notch */}
+              <div className="flex items-center justify-between px-4 pt-1 pb-2 border-b border-white/15 text-xs text-slate-400 font-mono">
+                <span className="font-bold text-white">9:41</span>
+                <div className="w-16 h-4 bg-[#0a0a0a] rounded-full border border-white/15 mx-auto" />
+                <span>5G 100%</span>
               </div>
 
-              {/* Mobile Card Components Stack */}
               <WearableStatsCard
                 profile={profile}
                 loading={profileLoading}
