@@ -1,27 +1,41 @@
-import type { CartSummary, FitnessProfile, TerminalLog, TerminalLogLevel } from "@/lib/types";
+import type { CartSummary, FitnessProfile, TerminalLog, TerminalLogLevel, JSONRPCFrame } from "@/lib/types";
 import { generateId } from "@/lib/utils";
 import { mcpServer, FOOD_SERVER, INSTAMART_SERVER } from "./mcp-server";
 
-const MOCK_PROFILE: FitnessProfile = {
+let CURRENT_PROFILE: FitnessProfile = {
   user_id: "user_palash_001",
   name: "Palash Shah",
+  avatar_url: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80",
+  goal_type: "bulking",
+  wearable_provider: "apple_health",
+  wearable_synced_at: "Just now",
   targets: { calories: 2500, protein: 160, carbs: 250, fats: 80 },
-  consumed: { calories: 1800, protein: 120, carbs: 180, fats: 55 },
-  remaining: { calories: 700, protein: 40, carbs: 70, fats: 25 },
+  consumed: { calories: 1780, protein: 118, carbs: 175, fats: 52 },
+  remaining: { calories: 720, protein: 42, carbs: 75, fats: 28 },
   activity_level: "Heavy Training",
-  last_workout: "Heavy Leg Day · 2h ago",
+  last_workout: "Heavy Leg Day · 2h ago (640 kcal burned)",
+  streak_days: 14,
 };
 
 export function getFitnessProfile(): FitnessProfile {
   return {
-    ...MOCK_PROFILE,
+    ...CURRENT_PROFILE,
     remaining: {
-      calories: Math.max(0, MOCK_PROFILE.targets.calories - MOCK_PROFILE.consumed.calories),
-      protein: Math.max(0, MOCK_PROFILE.targets.protein - MOCK_PROFILE.consumed.protein),
-      carbs: Math.max(0, MOCK_PROFILE.targets.carbs - MOCK_PROFILE.consumed.carbs),
-      fats: Math.max(0, MOCK_PROFILE.targets.fats - MOCK_PROFILE.consumed.fats),
+      calories: Math.max(0, CURRENT_PROFILE.targets.calories - CURRENT_PROFILE.consumed.calories),
+      protein: Math.max(0, CURRENT_PROFILE.targets.protein - CURRENT_PROFILE.consumed.protein),
+      carbs: Math.max(0, CURRENT_PROFILE.targets.carbs - CURRENT_PROFILE.consumed.carbs),
+      fats: Math.max(0, CURRENT_PROFILE.targets.fats - CURRENT_PROFILE.consumed.fats),
     },
   };
+}
+
+export function updateFitnessProfile(updates: Partial<FitnessProfile>): FitnessProfile {
+  CURRENT_PROFILE = {
+    ...CURRENT_PROFILE,
+    ...updates,
+    targets: { ...CURRENT_PROFILE.targets, ...(updates.targets ?? {}) },
+  };
+  return getFitnessProfile();
 }
 
 function makeLog(
@@ -29,16 +43,22 @@ function makeLog(
   server: string,
   tool: string,
   message: string,
-  payload?: Record<string, unknown>
+  payload?: Record<string, unknown>,
+  jsonrpc_request?: JSONRPCFrame,
+  jsonrpc_response?: JSONRPCFrame,
+  latency_ms?: number
 ): TerminalLog {
   return {
     id: generateId(),
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toLocaleTimeString("en-US", { hour12: false, hour: "2-digit", minute: "2-digit", second: "2-digit" }),
     level,
     server,
     tool,
     message,
     payload,
+    jsonrpc_request,
+    jsonrpc_response,
+    latency_ms,
   };
 }
 
@@ -53,47 +73,88 @@ function callMcp(
     .join(", ");
 
   logs.push(
-    makeLog("calling", server, method, `tool: \`${method}(${paramStr})\``, {
-      jsonrpc: "2.0",
+    makeLog("calling", server, method, `Calling MCP Tool: ${method}(${paramStr})`, {
+      server,
       method,
       params,
     })
   );
 
-  const response = mcpServer.dispatch(server, method, params);
+  const dispatchRes = mcpServer.dispatch(server, method, params);
 
-  if (response.error) {
+  if (dispatchRes.error) {
     logs.push(
-      makeLog("error", server, method, response.error.message, response.error as unknown as Record<string, unknown>)
+      makeLog(
+        "error",
+        server,
+        method,
+        dispatchRes.error.message,
+        dispatchRes.error as unknown as Record<string, unknown>,
+        dispatchRes.jsonrpc_request,
+        dispatchRes.jsonrpc_response,
+        dispatchRes.latency_ms
+      )
     );
     return { result: {}, logs };
   }
 
-  const result = response.result ?? {};
+  const result = dispatchRes.result ?? {};
 
   if (method === "get_addresses" && result.addresses) {
+    const defaultAddr = result.default_address as { address_id: string; label: string } | undefined;
     logs.push(
-      makeLog("parsing", server, method, `extracted \`addressId: "${result.default_address_id}"\``, {
-        addressId: result.default_address_id,
-      })
+      makeLog(
+        "parsing",
+        server,
+        method,
+        `Selected address: "${defaultAddr?.label ?? "Home"}" (${result.default_address ? "addr_home_001" : "default"})`,
+        { addressId: defaultAddr?.address_id },
+        dispatchRes.jsonrpc_request,
+        dispatchRes.jsonrpc_response,
+        dispatchRes.latency_ms
+      )
     );
   } else if (method === "search_restaurants" || method === "search_products") {
-    const results = result.results as unknown[] | undefined;
+    const results = (result.results as unknown[]) ?? [];
     logs.push(
-      makeLog("executing", server, method, `returned ${result.total} results`, {
-        total: result.total,
-        top_result: results?.[0],
-      })
+      makeLog(
+        "executing",
+        server,
+        method,
+        `Retrieved ${result.total} matching options from ${server.replace("mcp.swiggy.com/", "")}`,
+        { total: result.total, top_item: results[0] },
+        dispatchRes.jsonrpc_request,
+        dispatchRes.jsonrpc_response,
+        dispatchRes.latency_ms
+      )
     );
   } else if (method === "update_cart") {
     const token = String(result.checkout_token ?? "").slice(0, 16);
     logs.push(
-      makeLog("success", server, method, `checkout token generated → ${token}...`, {
-        checkout_url: result.checkout_url,
-      })
+      makeLog(
+        "success",
+        server,
+        method,
+        `Generated Swiggy Checkout session: token ${token}...`,
+        { checkout_url: result.checkout_url },
+        dispatchRes.jsonrpc_request,
+        dispatchRes.jsonrpc_response,
+        dispatchRes.latency_ms
+      )
     );
   } else {
-    logs.push(makeLog("success", server, method, "completed", result as Record<string, unknown>));
+    logs.push(
+      makeLog(
+        "success",
+        server,
+        method,
+        "Execution complete",
+        result as Record<string, unknown>,
+        dispatchRes.jsonrpc_request,
+        dispatchRes.jsonrpc_response,
+        dispatchRes.latency_ms
+      )
+    );
   }
 
   return { result: result as Record<string, unknown>, logs };
@@ -101,8 +162,8 @@ function callMcp(
 
 function detectIntent(message: string): string {
   const lower = message.toLowerCase();
-  const instamartKeywords = ["grocery", "groceries", "instamart", "meal prep", "ingredients", "yogurt", "chicken breast", "buy", "stock up", "pantry"];
-  const foodKeywords = ["dinner", "lunch", "breakfast", "restaurant", "meal", "order", "delivery", "spot", "bowl", "takeout", "eat", "food"];
+  const instamartKeywords = ["grocery", "groceries", "instamart", "meal prep", "ingredients", "yogurt", "chicken breast", "buy", "stock up", "pantry", "tofu", "egg white"];
+  const foodKeywords = ["dinner", "lunch", "breakfast", "restaurant", "meal", "order", "delivery", "spot", "bowl", "takeout", "eat", "food", "snack"];
 
   const instamartScore = instamartKeywords.filter((k) => lower.includes(k)).length;
   const foodScore = foodKeywords.filter((k) => lower.includes(k)).length;
@@ -116,9 +177,9 @@ function extractProteinTarget(message: string, remaining: number): number {
   const match = message.toLowerCase().match(/(\d+)\s*g?\s*\+?\s*protein/);
   if (match) return parseFloat(match[1]);
   if (message.toLowerCase().includes("high-protein") || message.toLowerCase().includes("high protein")) {
-    return Math.max(35, remaining * 0.8);
+    return Math.max(35, Math.round(remaining * 0.85));
   }
-  return Math.max(20, remaining * 0.5);
+  return Math.max(20, Math.round(remaining * 0.5));
 }
 
 function extractCalorieCap(message: string): number | null {
@@ -130,9 +191,13 @@ interface FoodResult {
   item_id: string;
   name: string;
   restaurant_name?: string;
+  image_url?: string;
   price: number;
+  rating?: number;
+  prep_time_mins?: number;
   macros: { calories: number; protein: number; carbs: number; fats: number };
   in_stock?: boolean;
+  tags?: string[];
 }
 
 function orchestrateFood(profile: FitnessProfile, message: string) {
@@ -146,7 +211,7 @@ function orchestrateFood(profile: FitnessProfile, message: string) {
 
   const searchParams: Record<string, unknown> = {
     address_id: addressId,
-    cuisine: "healthy",
+    cuisine: message.toLowerCase().includes("keto") ? "keto" : "healthy",
     min_protein: minProtein,
     sort_by: "rating",
   };
@@ -157,25 +222,25 @@ function orchestrateFood(profile: FitnessProfile, message: string) {
 
   const results = (searchResult.results as FoodResult[]) ?? [];
   if (results.length === 0) {
-    return { logs, cart: null, message: "No restaurants matched your macro criteria. Try adjusting your request." };
+    return { logs, cart: null, message: "No restaurants matched your exact macro criteria. Try broadening your request." };
   }
 
   let selected = results[0];
 
   if (selected.in_stock === false) {
     logs.push(
-      makeLog("error", FOOD_SERVER, "search_restaurants", `Item "${selected.name}" is OUT OF STOCK — seeking alternative`, {
+      makeLog("error", FOOD_SERVER, "search_restaurants", `Item "${selected.name}" is OUT OF STOCK — trigger auto-fallback`, {
         item_id: selected.item_id,
       })
     );
     const alt = mcpServer.findFoodAlternative(selected.item_id, minProtein);
     if (alt) {
       logs.push(
-        makeLog("executing", FOOD_SERVER, "search_restaurants", `Auto-fallback → "${alt.name}" (${alt.macros.protein}g protein)`, alt as unknown as Record<string, unknown>)
+        makeLog("executing", FOOD_SERVER, "search_restaurants", `Auto-fallback matched → "${alt.name}" (${alt.macros.protein}g protein)`, alt as unknown as Record<string, unknown>)
       );
       selected = alt;
     } else {
-      return { logs, cart: null, message: "Preferred item out of stock and no alternatives found." };
+      return { logs, cart: null, message: "Preferred item is currently out of stock." };
     }
   }
 
@@ -193,19 +258,30 @@ function orchestrateFood(profile: FitnessProfile, message: string) {
         name: selected.name,
         source: "food",
         restaurant: selected.restaurant_name,
+        image_url: selected.image_url,
         price: selected.price,
         quantity: 1,
         macros: selected.macros,
         in_stock: selected.in_stock ?? true,
+        rating: selected.rating,
+        prep_time_mins: selected.prep_time_mins ?? 22,
+        tags: selected.tags,
       },
     ],
     total_price: selected.price,
     total_macros: selected.macros,
     checkout_url: String(cartResult.checkout_url ?? ""),
+    address_id: addressId,
+    estimated_delivery_mins: 22,
   };
 
   const pct = Math.round((selected.macros.protein / profile.remaining.protein) * 100);
-  const messageOut = `Found ${selected.name} from ${selected.restaurant_name ?? "a top-rated spot"} — ${selected.macros.protein}g protein, ${selected.macros.calories} kcal. Covers ${pct}% of your remaining protein target. Added to cart!`;
+  const messageOut = `Selected **${selected.name}** from *${selected.restaurant_name ?? "Healthy Bites"}*.\n\n` +
+    `• **Protein**: ${selected.macros.protein}g (${pct}% of your ${profile.remaining.protein}g target)\n` +
+    `• **Calories**: ${selected.macros.calories} kcal\n` +
+    `• **Carbs/Fats**: ${selected.macros.carbs}g / ${selected.macros.fats}g\n` +
+    `• **Prep & Delivery**: ~${selected.prep_time_mins ?? 22} mins\n\n` +
+    `Added to your Swiggy Cart with live checkout link ready.`;
 
   return { logs, cart, message: messageOut };
 }
@@ -213,6 +289,8 @@ function orchestrateFood(profile: FitnessProfile, message: string) {
 interface GroceryResult {
   product_id: string;
   name: string;
+  brand?: string;
+  image_url?: string;
   price: number;
   macros: { calories: number; protein: number; carbs: number; fats: number };
   in_stock?: boolean;
@@ -231,6 +309,7 @@ function orchestrateInstamart(profile: FitnessProfile, message: string) {
   if (lower.includes("yogurt")) query = "yogurt";
   else if (lower.includes("chicken")) query = "chicken";
   else if (lower.includes("egg")) query = "egg";
+  else if (lower.includes("tofu")) query = "tofu";
 
   const { result: searchResult, logs: searchLogs } = callMcp(INSTAMART_SERVER, "search_products", {
     address_id: addressId,
@@ -241,7 +320,7 @@ function orchestrateInstamart(profile: FitnessProfile, message: string) {
 
   const results = (searchResult.results as GroceryResult[]) ?? [];
   if (results.length === 0) {
-    return { logs, cart: null, message: "No Instamart products matched. Try a different query." };
+    return { logs, cart: null, message: "No Instamart products matched your query." };
   }
 
   const cartItems: CartSummary["items"] = [];
@@ -252,14 +331,14 @@ function orchestrateInstamart(profile: FitnessProfile, message: string) {
   for (let item of results.slice(0, 3)) {
     if (item.in_stock === false) {
       logs.push(
-        makeLog("error", INSTAMART_SERVER, "search_products", `Product "${item.name}" OUT OF STOCK — seeking alternative`, {
+        makeLog("error", INSTAMART_SERVER, "search_products", `Item "${item.name}" out of stock — searching alternative`, {
           product_id: item.product_id,
         })
       );
       const alt = mcpServer.findGroceryAlternative(item.product_id, minProtein);
       if (alt) {
         logs.push(
-          makeLog("executing", INSTAMART_SERVER, "search_products", `Auto-fallback → "${alt.name}"`, alt as unknown as Record<string, unknown>)
+          makeLog("executing", INSTAMART_SERVER, "search_products", `Fallback match → "${alt.name}"`, alt as unknown as Record<string, unknown>)
         );
         item = alt;
       } else {
@@ -271,10 +350,14 @@ function orchestrateInstamart(profile: FitnessProfile, message: string) {
       id: item.product_id,
       name: item.name,
       source: "instamart",
+      restaurant: item.brand ?? "Instamart",
+      image_url: item.image_url,
       price: item.price,
       quantity: 1,
       macros: item.macros,
       in_stock: item.in_stock ?? true,
+      rating: 4.8,
+      prep_time_mins: 12,
     });
     mcpCartItems.push({ product_id: item.product_id, quantity: 1 });
     totalPrice += item.price;
@@ -285,7 +368,7 @@ function orchestrateInstamart(profile: FitnessProfile, message: string) {
   }
 
   if (cartItems.length === 0) {
-    return { logs, cart: null, message: "All matching products were out of stock." };
+    return { logs, cart: null, message: "Matching Instamart items were unavailable." };
   }
 
   const { result: cartResult, logs: cartLogs } = callMcp(INSTAMART_SERVER, "update_cart", {
@@ -300,10 +383,17 @@ function orchestrateInstamart(profile: FitnessProfile, message: string) {
     total_price: totalPrice,
     total_macros: totalMacros,
     checkout_url: String(cartResult.checkout_url ?? ""),
+    address_id: addressId,
+    estimated_delivery_mins: 12,
   };
 
-  const names = cartItems.map((c) => c.name).join(", ");
-  const messageOut = `Added ${cartItems.length} Instamart items to cart: ${names}. Combined: ${Math.round(totalMacros.protein)}g protein, ${Math.round(totalMacros.calories)} kcal.`;
+  const itemNames = cartItems.map((c) => c.name).join(", ");
+  const messageOut = `Selected **${cartItems.length} Instamart essentials** for meal prep:\n\n` +
+    `📦 ${itemNames}\n\n` +
+    `• **Total Protein**: ${Math.round(totalMacros.protein)}g\n` +
+    `• **Total Calories**: ${Math.round(totalMacros.calories)} kcal\n` +
+    `• **Estimated Delivery**: 12 mins via Instamart Express\n\n` +
+    `Cart updated and ready for checkout!`;
 
   return { logs, cart, message: messageOut };
 }
@@ -316,10 +406,10 @@ export async function* runAgent(message: string): AsyncGenerator<Record<string, 
     type: "log",
     log: makeLog(
       "info",
-      "nutro.ai/orchestrator",
+      "nutro.ai/telemetry",
       "analyze_macros",
-      `Remaining: ${profile.remaining.protein}g protein, ${profile.remaining.calories} kcal`,
-      profile.remaining as unknown as Record<string, unknown>
+      `Wearable Sync (${profile.wearable_provider}): ${profile.remaining.protein}g protein, ${profile.remaining.calories} kcal remaining today`,
+      { remaining: profile.remaining, wearable: profile.wearable_provider }
     ),
   };
 
@@ -330,17 +420,19 @@ export async function* runAgent(message: string): AsyncGenerator<Record<string, 
     type: "log",
     log: makeLog(
       "info",
-      "nutro.ai/orchestrator",
+      "nutro.ai/router",
       "route_intent",
-      `Routing to Swiggy ${intent === "food" ? "Food" : "Instamart"} MCP server`,
-      { intent }
+      `Dispatching intent to Swiggy ${intent === "food" ? "Food Delivery" : "Instamart"} MCP Server`,
+      { intent, server: intent === "food" ? FOOD_SERVER : INSTAMART_SERVER }
     ),
   };
 
   const { logs, cart, message: responseMsg } =
     intent === "instamart" ? orchestrateInstamart(profile, message) : orchestrateFood(profile, message);
 
-  for (const log of logs) yield { type: "log", log };
+  for (const log of logs) {
+    yield { type: "log", log };
+  }
 
   if (cart) yield { type: "cart", cart };
 
